@@ -1,0 +1,68 @@
+---
+title: "Reproducing Results of Gerard, Ferrao, and Stephens (2017)"
+bibliography: geno_bib.bib
+output: github_document
+---
+
+# Introduction
+
+This repository contains code to reproduce the empirical evaluations
+of @gerard2017harnessing. The new methods can be found in the
+[updog](https://github.com/dcgerard/updog) package.
+
+```{r, echo = FALSE, results = "hide"}
+liblist <- list("tidyverse", "updog")
+lapply(liblist, require, character.only = TRUE)
+```
+
+If you are having trouble reproducing these results, it might be that you need to update some of your R packages. These are the versions that I used:
+
+```{r}
+sessionInfo()
+```
+
+As you can see above, I've also only tried this out on Ubuntu.
+
+If you find a bug, please create an
+[issue](https://github.com/dcgerard/reproduce_genotyping/issues).
+
+# Instructions
+
+To reproduce the results in @gerard2017harnessing, you need to (1) download the appropriate R packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
+
+## Install R Packages
+
+To install the needed R packages, run the following in R
+
+``` r
+install.packages("tidyverse")
+devtools::install_github("dcgerard/updog")
+```
+
+## Get Data
+
+Place the following files in the Data folder:
+
+1. [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/)
+
+## Run Make
+
+To reproduce all of the results in @gerard2016unifying, simply run
+`make` from the terminal.
+
+## Get Coffee
+
+You should get some coffee. Here is a list of some of my favorite places:
+
+* Chicago
+    - [Sawada Coffee](https://www.yelp.com/biz/sawada-coffee-chicago)
+    - [Plein Air Cafe](https://www.yelp.com/biz/plein-air-cafe-and-eatery-chicago-2)
+* Seattle
+    - [Bauhaus Ballard](https://www.yelp.com/biz/bauhaus-ballard-seattle)
+    - [Cafe Solstice](https://www.yelp.com/biz/cafe-solstice-seattle)
+* Columbus
+    - [Yeah, Me Too](https://www.yelp.com/biz/yeah-me-too-columbus)
+    - [Stauf's Coffee Roasters](https://www.yelp.com/biz/staufs-coffee-roasters-columbus-2)
+    - [Caffe Apropos](https://www.yelp.com/biz/caff%C3%A9-apropos-columbus-2)
+
+# References

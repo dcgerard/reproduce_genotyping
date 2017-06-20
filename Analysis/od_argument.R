@@ -84,4 +84,3 @@ dev.off()
 ## Calculate p-value of seeing so many points outside the 95 percent intervals
 mean(bad_ocounts)
 pvalue <- stats::pbinom(q = sum(bad_ocounts), size = length(bad_ocounts), prob = 0.05, lower.tail = FALSE)
-pvalue
