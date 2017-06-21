@@ -11,13 +11,21 @@ ufits = ./Output/updog_fits/uout1.RDS \
 	./Output/updog_fits/uout2.RDS \
 	./Output/updog_fits/uout3.RDS
 
+blischak_fits = ./Output/blischak_formatted_data/counts_mat.txt \
+		./Output/blischak_formatted_data/size_mat.txt \
+		./Output/blischak_formatted_data/seq_error.txt \
+		./Output/blischak_formatted_data/diseq-F.txt \
+		./Output/blischak_formatted_data/diseq-freqs.txt \
+		./Output/blischak_formatted_data/diseq-genos.txt
+
 all : $(od_output) \
       $(bias_output) \
       ./Output/text/out_prob.txt \
       ./Output/fig/prior_quantiles.pdf \
       ./Output/fig/snp_examples.pdf \
       ./Output/fig/prob_plots.pdf \
-      ./Output/fig/updog_fits.pdf
+      ./Output/fig/updog_fits.pdf \
+      $(blischak_fits)
 
 # Extract the reference and alternative counts from the shirasawa et al data.
 $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
@@ -65,3 +73,7 @@ $(bias_output) : $(shirasawa_snps) ./Analysis/bias_arg.R
 ./Output/fig/updog_fits.pdf : $(ufits) ./Analysis/plot_updog_fits.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_updog_fits.R
+
+$(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
+	mkdir -p ./Output/blischak_formatted_data
+	Rscript ./Analysis/fit_blischak.R
