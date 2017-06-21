@@ -6,7 +6,7 @@ osize <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 
 ocounts <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 3]
 ploidy <- 6
 
-uout <- updog_vanilla(ocounts = ocounts, osize = osize, ploidy = ploidy)
+uout <- updog_vanilla(ocounts = ocounts, osize = osize, ploidy = ploidy, model = "s1")
 plot(uout, plot_beta = FALSE)
 
 pvec <- updog::get_pvec(ploidy = ploidy, bias_val = uout$bias_val,
