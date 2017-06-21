@@ -72,7 +72,7 @@ You should get some coffee. Here is a list of some of my favorite places:
     
 # Note on SuperMASSA
 
-There appears to be no way to automate [SuperMASSA](http://statgen.esalq.usp.br/SuperMASSA/). As such, I've committed the inputs and fits in the Output folder. If you want to generate these fits, you'll have to do it manually.
+There appears to be no way to automate [SuperMASSA](http://statgen.esalq.usp.br/SuperMASSA/). As such, I've committed the inputs and fits in the [Output](https://github.com/dcgerard/reproduce_genotyping/tree/master/Output/supermassa_formatted_data) folder. If you want to generate these fits, you'll have to do it manually.
 
 # References
 
