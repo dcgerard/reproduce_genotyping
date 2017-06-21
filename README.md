@@ -28,8 +28,9 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] updog_0.1.0     dplyr_0.5.0     purrr_0.2.2     readr_1.0.0    
-    ## [5] tidyr_0.6.1     tibble_1.2      ggplot2_2.2.1   tidyverse_1.1.1
+    ## [1] rmutil_1.1.0    updog_0.1.0     dplyr_0.5.0     purrr_0.2.2    
+    ## [5] readr_1.0.0     tidyr_0.6.1     tibble_1.2      ggplot2_2.2.1  
+    ## [9] tidyverse_1.1.1
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] Rcpp_0.12.11     plyr_1.8.4       forcats_0.2.0    tools_3.3.2     
@@ -68,7 +69,9 @@ Get Data
 
 Place the following files in the Data folder:
 
-1.  [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/)
+1.  [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.or.jp/)
+
+The actual URL is: <ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/>
 
 Run Make
 --------

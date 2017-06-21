@@ -43,7 +43,9 @@ devtools::install_github("dcgerard/updog")
 
 Place the following files in the Data folder:
 
-1. [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/)
+1. [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.or.jp/)
+
+The actual URL is: ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/
 
 ## Run Make
 
