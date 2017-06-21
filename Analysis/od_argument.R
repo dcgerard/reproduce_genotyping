@@ -63,7 +63,6 @@ pl <- ggplot(data = dat_counts, mapping = aes(x = a, y = A, col = bad_ocounts)) 
         yend = "yend"), lty = 2, alpha = 1 / 2, color = "black",
         size = 0.5) +
     ggthemes::scale_color_colorblind(guide = FALSE)
-print(pl)    
 
 colvec <- ggthemes::colorblind_pal()(4)
 
@@ -82,5 +81,8 @@ print(pl)
 dev.off()
 
 ## Calculate p-value of seeing so many points outside the 95 percent intervals
-mean(bad_ocounts)
 pvalue <- stats::pbinom(q = sum(bad_ocounts), size = length(bad_ocounts), prob = 0.05, lower.tail = FALSE)
+
+cat(file = "./Output/text/od_summaries.txt",
+    "Proportion of points outside of 95% intervals:", mean(bad_ocounts), "\n",
+    "Probability of seeing as many or more points outside of 95% intervals if binomial likelihood is correct:", pvalue)

@@ -16,4 +16,6 @@ outcount <- ocounts[which.min(uout$prob_ok)]
 outsize <- osize[which.min(uout$prob_ok)]
 pvalue <- rmutil::pbetabinom(q = outcount, size = outsize, m = pvec[5],
                              s = (1 - uout$od_param) / uout$od_param)
-pvalue
+cat(file = "./Output/text/out_prob.txt",
+    "Probability of 'outlying point' having as few or fewer A counts given genotype of AAAAaa:", pvalue)
+

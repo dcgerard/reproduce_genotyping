@@ -34,7 +34,10 @@ pdf(file = "./Output/fig/bias_arg.pdf", family = "Times",
 print(pl)
 dev.off()
 
-mean(col, na.rm = TRUE)
-
+# mean(col, na.rm = TRUE)
 pvalue <- pbinom(sum(col, na.rm = TRUE), size = sum(!is.na(col)), prob = 0.25)
-pvalue
+# pvalue
+
+cat(file = "./Output/text/bias_summaries.txt",
+    "Proportion of points with greater than 95% A:", mean(col, na.rm = TRUE), "\n",
+    "If these points were the AAAAAA genotypes, then the probability of seeing as few or fewer AAAAAA\ngenotypes under Mendelian segregation is:", pvalue)

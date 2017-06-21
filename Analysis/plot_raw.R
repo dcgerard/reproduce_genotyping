@@ -34,8 +34,8 @@ pl <- ggplot(data = longdat, mapping = aes(x = a, y = A, pch = out, size = ok_si
     geom_point() +
     theme_bw() +
     facet_grid(. ~ SNP) +
-    xlim(0, maxval) +
-    ylim(0, maxval) +
+    xlim(0, maxcount) +
+    ylim(0, maxcount) +
     geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 2) +
     theme(strip.background = element_rect(fill = "white"),
           legend.position = "none") +
