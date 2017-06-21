@@ -18,6 +18,10 @@ blischak_fits = ./Output/blischak_formatted_data/counts_mat.txt \
 		./Output/blischak_formatted_data/diseq-freqs.txt \
 		./Output/blischak_formatted_data/diseq-genos.txt
 
+supermassa_fits = ./Output/supermassa_formatted_data/supermassa_out1.txt \
+		  ./Output/supermassa_formatted_data/supermassa_out2.txt \
+		  ./Output/supermassa_formatted_data/supermassa_out3.txt
+
 all : $(od_output) \
       $(bias_output) \
       ./Output/text/out_prob.txt \
@@ -27,7 +31,8 @@ all : $(od_output) \
       ./Output/fig/updog_fits.pdf \
       $(blischak_fits) \
       ./Output/fig/blischak_fits.pdf \
-      ./Output/fig/ident_prob.pdf
+      ./Output/fig/ident_prob.pdf \
+      ./Output/fig/supermassa_fits.pdf
 
 # Extract the reference and alternative counts from the shirasawa et al data.
 $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
@@ -91,3 +96,8 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 ./Output/fig/ident_prob.pdf : $(ufits) ./Analysis/hypothetical_problem.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/hypothetical_problem.R
+
+# Plot SuperMASSA fits from http://statgen.esalq.usp.br/SuperMASSA/
+./Output/fig/supermassa_fits.pdf : $(supermassa_fits) ./Analysis/plot_supermassa.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/plot_supermassa.R
