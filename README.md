@@ -54,8 +54,8 @@ Instructions
 
 To reproduce the results in Gerard, Ferrão, and Stephens (2017), you need to (1) download the appropriate R packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
 
-Install R Packages
-------------------
+Install Packages
+----------------
 
 To install the needed R packages, run the following in R
 
@@ -63,6 +63,8 @@ To install the needed R packages, run the following in R
 install.packages(c("tidyverse", "rmutil", "snow", "parallel"))
 devtools::install_github("dcgerard/updog")
 ```
+
+Please follow the directions [here](https://github.com/pblischak/polyploid-genotyping/tree/master/ebg) to install `ebg`.
 
 Get Data
 --------
