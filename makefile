@@ -26,7 +26,8 @@ all : $(od_output) \
       ./Output/fig/prob_plots.pdf \
       ./Output/fig/updog_fits.pdf \
       $(blischak_fits) \
-      ./Output/fig/blischak_fits.pdf
+      ./Output/fig/blischak_fits.pdf \
+      ./Output/fig/ident_prob.pdf
 
 # Extract the reference and alternative counts from the shirasawa et al data.
 $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
@@ -84,3 +85,9 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 ./Output/fig/blischak_fits.pdf : $(blischak_fits) ./Analysis/plot_blischak.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_blischak.R
+
+
+# Hypothetical data with identifiability issue
+./Output/fig/ident_prob.pdf : $(ufits) ./Analysis/hypothetical_problem.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/hypothetical_problem.R
