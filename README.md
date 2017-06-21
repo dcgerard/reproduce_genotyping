@@ -76,7 +76,7 @@ The actual URL is: <ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/>
 Run Make
 --------
 
-To reproduce all of the results in (<span class="citeproc-not-found" data-reference-id="gerard2016unifying">**???**</span>), simply run `make` from the terminal.
+To reproduce all of the results in Gerard, Ferrão, and Stephens (2017), simply run `make` from the terminal.
 
 Get Coffee
 ----------

@@ -49,7 +49,7 @@ The actual URL is: ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/
 
 ## Run Make
 
-To reproduce all of the results in @gerard2016unifying, simply run
+To reproduce all of the results in @gerard2017harnessing, simply run
 `make` from the terminal.
 
 ## Get Coffee
