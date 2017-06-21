@@ -52,7 +52,7 @@ If you find a bug, please create an [issue](https://github.com/dcgerard/reproduc
 Instructions
 ============
 
-To reproduce the results in Gerard, Ferrão, and Stephens (2017), you need to (1) download the appropriate R packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
+To reproduce the results in Gerard, Ferrão, and Stephens (2017), you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
 
 Install Packages
 ----------------

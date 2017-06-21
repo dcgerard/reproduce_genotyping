@@ -28,7 +28,7 @@ If you find a bug, please create an
 
 # Instructions
 
-To reproduce the results in @gerard2017harnessing, you need to (1) download the appropriate R packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
+To reproduce the results in @gerard2017harnessing, you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
 
 ## Install Packages
 
