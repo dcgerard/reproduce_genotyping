@@ -96,6 +96,11 @@ You should get some coffee. Here is a list of some of my favorite places:
     -   [Stauf's Coffee Roasters](https://www.yelp.com/biz/staufs-coffee-roasters-columbus-2)
     -   [Caffe Apropos](https://www.yelp.com/biz/caff%C3%A9-apropos-columbus-2)
 
+Note on SuperMASSA
+==================
+
+There appears to be no way to automate [SuperMASSA](http://statgen.esalq.usp.br/SuperMASSA/). As such, I've committed the inputs and fits in the Output folder. If you want to generate these fits, you'll have to do it manually.
+
 References
 ==========
 
