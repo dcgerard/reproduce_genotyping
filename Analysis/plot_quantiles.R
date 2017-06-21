@@ -2,7 +2,7 @@
 ## rate and bias parameter.
 
 library(updog)
-library(tidyverse)
+suppressMessages(library(tidyverse))
 ploidy <- 6
 
 bias_lower <- exp(stats::qnorm(0.025, mean = 0, sd = 1))

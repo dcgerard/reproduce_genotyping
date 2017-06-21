@@ -1,6 +1,6 @@
 ## Argument for overdispersion
 library(updog)
-library(tidyverse)
+suppressMessages(library(tidyverse))
 osize <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)[, 1]
 ocounts <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 1]
 

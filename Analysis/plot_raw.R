@@ -1,10 +1,10 @@
 ## Plot the raw data ----------------------------------
 library(updog)
-library(tidyverse)
+suppressMessages(library(tidyverse))
 
 ploidy      <- 6
-osize_mat   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)
-ocounts_mat <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)
+osize_mat   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)[, 1:3]
+ocounts_mat <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 1:3]
 
 l1 <- gather(osize_mat, key = "SNP", value = "Size")
 l2 <- gather(ocounts_mat, key = "SNP", value = "Counts")

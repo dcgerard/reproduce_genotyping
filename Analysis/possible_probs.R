@@ -1,7 +1,7 @@
-## Plot the possible probabilities given the sequencing error rate and 
+## Plot the possible probabilities given the sequencing error rate and
 ## read-mapping bias.
 
-library(tidyverse)
+suppressMessages(library(tidyverse))
 library(updog)
 ploidy <- 6
 bias_vec <- c(0.1, 0.5, 1, 2, 10)
@@ -42,7 +42,6 @@ pl <- ggplot(data = df_tot, mapping = aes(x = x, y = y,
     xlab("Bias") +
     ylab("Sequencing Error") +
     ggthemes::scale_color_colorblind(name = "Original\nProbabilities")
-print(pl)
 
 pdf(file = "./Output/fig/prob_plots.pdf", family = "Times",
     colormodel = "cmyk", width = 6, height = 3)

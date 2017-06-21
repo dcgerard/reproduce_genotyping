@@ -14,7 +14,7 @@ all : $(od_output) \
       ./Output/fig/snp_examples.pdf \
       ./Output/fig/prob_plots.pdf
 
-$(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz
+$(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
 	mkdir -p ./Output/shirasawa_snps
 	Rscript ./Analysis/parse_vcf.R
 

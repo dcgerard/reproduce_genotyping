@@ -1,7 +1,7 @@
 ## Arguement for read-mapping bias using mendelian segregation
 
 library(updog)
-library(tidyverse)
+suppressMessages(library(tidyverse))
 osize <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)[, 2]
 ocounts <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 2]
 col <- ocounts / osize > 0.95
