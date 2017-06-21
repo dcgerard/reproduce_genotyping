@@ -60,7 +60,7 @@ Install R Packages
 To install the needed R packages, run the following in R
 
 ``` r
-install.packages("tidyverse")
+install.packages(c("tidyverse", "rmutil"))
 devtools::install_github("dcgerard/updog")
 ```
 

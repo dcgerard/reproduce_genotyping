@@ -35,7 +35,7 @@ To reproduce the results in @gerard2017harnessing, you need to (1) download the 
 To install the needed R packages, run the following in R
 
 ```{r, eval = FALSE}
-install.packages("tidyverse")
+install.packages(c("tidyverse", "rmutil"))
 devtools::install_github("dcgerard/updog")
 ```
 
