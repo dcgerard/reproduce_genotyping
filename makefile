@@ -26,7 +26,7 @@ all : $(od_output) \
       ./Output/fig/prob_plots.pdf \
       ./Output/fig/updog_fits.pdf \
       $(blischak_fits) \
-      ./Output/fig/blischak_fits.R
+      ./Output/fig/blischak_fits.pdf
 
 # Extract the reference and alternative counts from the shirasawa et al data.
 $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
@@ -75,10 +75,12 @@ $(bias_output) : $(shirasawa_snps) ./Analysis/bias_arg.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_updog_fits.R
 
+# Run ebg on the data using sequencing error rates estimated from updog
 $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 	mkdir -p ./Output/blischak_formatted_data
 	Rscript ./Analysis/fit_blischak.R
 
-./Output/fig/blischak_fits.R : $(blischak_fits) ./Analysis/plot_blischak.R
+# plot blischak output
+./Output/fig/blischak_fits.pdf : $(blischak_fits) ./Analysis/plot_blischak.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_blischak.R
