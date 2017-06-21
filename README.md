@@ -25,25 +25,25 @@ sessionInfo()
     ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
     ## 
     ## attached base packages:
-    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+    ## [8] base     
     ## 
     ## other attached packages:
-    ## [1] rmutil_1.1.0    updog_0.1.0     dplyr_0.5.0     purrr_0.2.2    
-    ## [5] readr_1.0.0     tidyr_0.6.1     tibble_1.2      ggplot2_2.2.1  
-    ## [9] tidyverse_1.1.1
+    ##  [1] snow_0.4-2      rmutil_1.1.0    updog_0.1.0     dplyr_0.5.0    
+    ##  [5] purrr_0.2.2     readr_1.0.0     tidyr_0.6.1     tibble_1.2     
+    ##  [9] ggplot2_2.2.1   tidyverse_1.1.1
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] Rcpp_0.12.11     plyr_1.8.4       forcats_0.2.0    tools_3.3.2     
     ##  [5] digest_0.6.12    jsonlite_1.3     lubridate_1.6.0  evaluate_0.10   
     ##  [9] nlme_3.1-131     gtable_0.2.0     lattice_0.20-34  psych_1.6.12    
-    ## [13] DBI_0.6          yaml_2.1.14      parallel_3.3.2   haven_1.0.0     
-    ## [17] xml2_1.1.1       stringr_1.2.0    httr_1.2.1       knitr_1.15.1    
-    ## [21] hms_0.3          rprojroot_1.2    grid_3.3.2       R6_2.2.0        
-    ## [25] readxl_0.1.1     foreign_0.8-67   rmarkdown_1.3    modelr_0.1.0    
-    ## [29] reshape2_1.4.2   magrittr_1.5     backports_1.0.5  scales_0.4.1    
-    ## [33] htmltools_0.3.5  rvest_0.3.2      assertthat_0.2.0 mnormt_1.5-5    
-    ## [37] colorspace_1.3-2 stringi_1.1.2    lazyeval_0.2.0   munsell_0.4.3   
-    ## [41] broom_0.4.2
+    ## [13] DBI_0.6          yaml_2.1.14      haven_1.0.0      xml2_1.1.1      
+    ## [17] stringr_1.2.0    httr_1.2.1       knitr_1.15.1     hms_0.3         
+    ## [21] rprojroot_1.2    grid_3.3.2       R6_2.2.0         readxl_0.1.1    
+    ## [25] foreign_0.8-67   rmarkdown_1.3    modelr_0.1.0     reshape2_1.4.2  
+    ## [29] magrittr_1.5     backports_1.0.5  scales_0.4.1     htmltools_0.3.5 
+    ## [33] rvest_0.3.2      assertthat_0.2.0 mnormt_1.5-5     colorspace_1.3-2
+    ## [37] stringi_1.1.2    lazyeval_0.2.0   munsell_0.4.3    broom_0.4.2
 
 As you can see above, I've also only tried this out on Ubuntu.
 
@@ -60,7 +60,7 @@ Install R Packages
 To install the needed R packages, run the following in R
 
 ``` r
-install.packages(c("tidyverse", "rmutil"))
+install.packages(c("tidyverse", "rmutil", "snow", "parallel"))
 devtools::install_github("dcgerard/updog")
 ```
 
