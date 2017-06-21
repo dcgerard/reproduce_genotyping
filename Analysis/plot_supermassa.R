@@ -49,6 +49,6 @@ pl <- ggplot(data = snptot, mapping = aes(x = a, y = A, col = geno)) +
   ggthemes::scale_color_colorblind()
 
 pdf(file = "./Output/fig/supermassa_fits.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.4, width = 6)
+    family = "Times", height = 2.1, width = 6.5)
 print(pl)
 dev.off()
