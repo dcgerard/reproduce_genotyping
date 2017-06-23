@@ -22,7 +22,10 @@ supermassa_fits = ./Output/supermassa_formatted_data/supermassa_out1.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out2.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out3.txt
 
-all : $(od_output) \
+all : sweet_potato
+
+.PHONY : sweet_potato
+sweet_potato : $(od_output) \
       $(bias_output) \
       ./Output/text/out_prob.txt \
       ./Output/fig/prior_quantiles.pdf \
