@@ -17,8 +17,16 @@ one_rep <- function(unew, usame) {
   true_ogeno <- rout$ogeno
 
   ## Run updog -------------------------------------------------
-  uout <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "hw",
-                               out_prop = 0, update_outprop = FALSE, non_mono_max = Inf)
+  bias_start <- exp(-2:2) ## plus to minus three sd
+  llike_old <- -Inf
+  for (index in 1:length(bias_start)) {
+    utemp <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "hw",
+                                 out_prop = 0, update_outprop = FALSE, bias_val = bias_start[index])
+    if (utemp$llike > llike_old) {
+      uout <- utemp
+      llike_old <- uout$llike
+    }
+  }
 
   ## Run Blischak -----------------------------------------------------------------------
   write.table(matrix(osize), "./Output/blischak_formatted_data_sims/size.txt", row.names = FALSE, col.names = FALSE)
