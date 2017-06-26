@@ -78,12 +78,22 @@ The actual URL is: <ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/>
 Run Make
 --------
 
-To reproduce all of the results in Gerard, Ferrão, and Stephens (2017), simply run `make` from the terminal.
+To reproduce all of the results in Gerard, Ferrão, and Stephens (2017), simply run `make` from the terminal. To reproduce the real-data analysis, run
+
+``` bash
+make sweet_potato
+```
+
+To reproduce the simulations, run
+
+``` r
+make simulations
+```
 
 Get Coffee
 ----------
 
-You should get some coffee. Here is a list of some of my favorite places:
+The simulations should take a few hours. You should get some coffee. Here is a list of some of my favorite places:
 
 -   Chicago
     -   [Sawada Coffee](https://www.yelp.com/biz/sawada-coffee-chicago)
