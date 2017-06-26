@@ -126,6 +126,7 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 # Run Simulations
 ./Output/sims_out/sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_sims.R
 	mkdir -p ./Output/sims_out
+	mkdir -p ./Output/blischak_formatted_data_sims/
 	Rscript ./Analysis/run_sims.R
 
 # Plot simulations
