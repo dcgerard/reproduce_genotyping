@@ -85,9 +85,9 @@ pl_od <- ggplot(data = longdat, mapping = aes(x = as.factor(od_param), y = uod_p
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   xlab(expression(tau)) +
   ylab(expression(hat(tau))) +
-  geom_hline(yintercept = 0, lty = 2, alpha = 1 / 2) +
-  geom_hline(yintercept = 0.01, lty = 2, alpha = 1 / 2) +
-  geom_hline(yintercept = 0.1, lty = 2, alpha = 1 / 2)
+  geom_hline(yintercept = 0, lty = 2, alpha = 1 / 2, color = "red") +
+  geom_hline(yintercept = 0.01, lty = 2, alpha = 1 / 2, color = "red") +
+  geom_hline(yintercept = 0.1, lty = 2, alpha = 1 / 2, color = "red")
 
 
 
@@ -139,7 +139,7 @@ pl_seq <- ggplot(data = longdat, mapping = aes(x = as.factor(od_param), y = useq
 
 ## Plots for main part of paper.
 library(gridExtra)
-pdf(file = "./Output/fig/param_ests.pdf", family = "Times", colormodel = "cmyk", height = 3, width = 6.5)
+pdf(file = "./Output/fig/param_ests.pdf", family = "Times", colormodel = "cmyk", height = 2.3, width = 6.5)
 grid.arrange(pl_od, pl_bias, pl_seq, ncol = 3)
 dev.off()
 

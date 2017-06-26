@@ -22,7 +22,15 @@ supermassa_fits = ./Output/supermassa_formatted_data/supermassa_out1.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out2.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out3.txt
 
-all : sweet_potato
+sim_plots = ./Output/fig/allele_freq_est.pdf \
+	    ./Output/fig/bias_v_af.pdf \
+            ./Output/fig/od_v_af.pdf \
+            ./Output/fig/od_v_bias.pdf \
+            ./Output/fig/param_ests.pdf \
+            ./Output/fig/prop_correct_lines.pdf \
+            ./Output/fig/seq_v_af.pdf
+
+all : sweet_potato simulations
 
 .PHONY : sweet_potato
 sweet_potato : $(od_output) \
@@ -35,7 +43,13 @@ sweet_potato : $(od_output) \
       $(blischak_fits) \
       ./Output/fig/blischak_fits.pdf \
       ./Output/fig/ident_prob.pdf \
-      ./Output/fig/supermassa_fits.pdf
+      ./Output/fig/supermassa_fits.pdf \
+      ./Output/fig/real_data_plots.pdf
+
+.PHONY : simulations
+simulations : ./Output/sims_out/sims_out.csv \
+	      $(sim_plots)
+
 
 # Extract the reference and alternative counts from the shirasawa et al data.
 $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/parse_vcf.R
@@ -94,7 +108,6 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_blischak.R
 
-
 # Hypothetical data with identifiability issue
 ./Output/fig/ident_prob.pdf : $(ufits) ./Analysis/hypothetical_problem.R
 	mkdir -p ./Output/fig
@@ -104,3 +117,18 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 ./Output/fig/supermassa_fits.pdf : $(supermassa_fits) ./Analysis/plot_supermassa.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_supermassa.R
+
+# Plot Supermassa, updog, and Blischak on the SNPs I chose
+./Output/fig/real_data_plots.pdf : $(blischak_fits) $(ufits) $(supermassa_fits) ./Analysis/plot_combined.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/plot_combined.R
+
+# Run Simulations
+./Output/sims_out/sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_sims.R
+	mkdir -p ./Output/sims_out
+	Rscript ./Analysis/run_sims.R
+
+# Plot simulations
+$(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_sims.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/plot_sims.R
