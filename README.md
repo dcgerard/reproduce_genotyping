@@ -29,9 +29,9 @@ sessionInfo()
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] snow_0.4-2      rmutil_1.1.0    updog_0.1.0     dplyr_0.5.0    
-    ##  [5] purrr_0.2.2     readr_1.0.0     tidyr_0.6.1     tibble_1.2     
-    ##  [9] ggplot2_2.2.1   tidyverse_1.1.1
+    ##  [1] gridExtra_2.2.1 ggthemes_3.4.0  snow_0.4-2      rmutil_1.1.0   
+    ##  [5] updog_0.1.0     dplyr_0.5.0     purrr_0.2.2     readr_1.0.0    
+    ##  [9] tidyr_0.6.1     tibble_1.2      ggplot2_2.2.1   tidyverse_1.1.1
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] Rcpp_0.12.11     plyr_1.8.4       forcats_0.2.0    tools_3.3.2     
@@ -60,7 +60,7 @@ Install Packages
 To install the needed R packages, run the following in R
 
 ``` r
-install.packages(c("tidyverse", "rmutil", "snow", "parallel"))
+install.packages(c("tidyverse", "rmutil", "snow", "parallel", "ggthemes", "gridExtra"))
 devtools::install_github("dcgerard/updog")
 ```
 
@@ -69,11 +69,7 @@ Please follow the directions [here](https://github.com/pblischak/polyploid-genot
 Get Data
 --------
 
-Place the following files in the Data folder:
-
-1.  [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.or.jp/)
-
-The actual URL is: <ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/>
+Place [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.or.jp/) in the Data folder. The direct url is: <ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/>
 
 Run Make
 --------
