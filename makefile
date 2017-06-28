@@ -44,7 +44,8 @@ sweet_potato : $(od_output) \
       ./Output/fig/blischak_fits.pdf \
       ./Output/fig/ident_prob.pdf \
       ./Output/fig/supermassa_fits.pdf \
-      ./Output/fig/real_data_plots.pdf
+      ./Output/fig/real_data_plots.pdf \
+      ./Output/fig/ufit_features.pdf
 
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
@@ -133,3 +134,8 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 $(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_sims.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_sims.R
+
+# Histograms of updog estimates on Shirasawa data
+./Output/fig/ufit_features.pdf : $(ufits) ./Analysis/shirasawa_data_features.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/shirasawa_data_features.R
