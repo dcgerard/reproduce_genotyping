@@ -1,16 +1,17 @@
 ## Hypothetical problem.
-set.seed(19)
+set.seed(20)
 library(updog)
 suppressMessages(library(tidyverse))
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
 
 uout$input$ploidy <- 4
-uout$p1geno <- 4
-uout$p2geno <- 0
-uout$bias_val <- 0.5
-uout$seq_error <- 0.005
-uout$od_param <- 0.001
-ploidy <- 4
+uout$p1geno       <- 4
+uout$p2geno       <- 0
+uout$bias_val     <- 0.5
+uout$seq_error    <- 0.005
+uout$od_param     <- 0.001
+uout$input$model  <- "f1"
+ploidy            <- 4
 
 rout <- rupdog(uout)
 

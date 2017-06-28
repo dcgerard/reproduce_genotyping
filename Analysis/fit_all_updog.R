@@ -1,5 +1,4 @@
 ## Fit updog on all 1000 SNPs
-
 library(updog)
 suppressMessages(library(tidyverse))
 counts_mat <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)
