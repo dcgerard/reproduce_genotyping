@@ -124,7 +124,7 @@ dflines_combo <- bind_rows(dflines_combo, df_lines_tot)
 snp_combo$geno <- factor(snp_combo$geno, levels = 0:ploidy)
 
 
-possible_colors <- ggthemes::colorblind_pal()(5)[c(4:2, 5)]
+possible_colors <- ggthemes::colorblind_pal()(5)[c(5, 3:1)]
 
 pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha = prob_ok)) +
   facet_grid(snp ~ Method) +
