@@ -123,6 +123,9 @@ snp_combo <- bind_rows(snp_combo, select(dfdat_tot, A, a, geno, snp, Method, pro
 dflines_combo <- bind_rows(dflines_combo, df_lines_tot)
 snp_combo$geno <- factor(snp_combo$geno, levels = 0:ploidy)
 
+
+possible_colors <- ggthemes::colorblind_pal()(5)[c(4:2, 5)]
+
 pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha = prob_ok)) +
   facet_grid(snp ~ Method) +
   geom_point(size = 0.3) +
@@ -135,7 +138,7 @@ pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha =
   xlab("Counts a") +
   ylab("Counts A") +
   scale_alpha_continuous(name = "Probability\nNon-outlier") +
-  ggthemes::scale_color_colorblind(name = "Estimated\nGenotype")
+  scale_color_manual(name = "Estimated\nGenotype", values = possible_colors)
 
 pdf(file = "./Output/fig/real_data_plots.pdf", colormodel = "cmyk", family = "Times",
     height = 5.5, width = 6.5)
