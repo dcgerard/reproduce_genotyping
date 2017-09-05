@@ -47,3 +47,36 @@ pdf(file = "./Output/fig/snp_examples.pdf", colormodel = "cmyk",
     family = "Times", height = 2.4, width = 6)
 print(pl)
 dev.off()
+
+## Single well-behaved SNP -------------------------------------------------------------------
+
+osize_vec   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)[, 7]
+ocounts_vec <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 7]
+
+dfdat <- data_frame(a = osize_vec - ocounts_vec, A = ocounts_vec)
+maxcount <- max(c(dfdat$a, dfdat$A))
+xend <- pmin(rep(maxcount, ploidy + 1), maxcount / slopevec)
+yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
+smalldat <- data_frame(SNP = rep(c("SNP1", "SNP2", "SNP3"), each = ploidy + 1),
+                       xend = rep(xend, times = 3), yend = rep(yend, times = 3))
+smalldat$xstart <- 0
+smalldat$ystart <- 0
+smalldat$out <- FALSE
+smalldat$ok_size <- 0.5
+
+pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A)) +
+  geom_point(size = 0.2) +
+  theme_bw() +
+  xlim(0, maxcount) +
+  ylim(0, maxcount) +
+  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 2) +
+  theme(strip.background = element_rect(fill = "white"),
+        legend.position = "none") +
+  xlab("Counts a") +
+  ylab("Counts A") +
+  scale_size_continuous(range = c(0.4, 1))
+
+pdf(file = "./Output/fig/single_snp.pdf", colormodel = "cmyk",
+    family = "Times", height = 2.4, width = 2.4)
+print(pl)
+dev.off()
