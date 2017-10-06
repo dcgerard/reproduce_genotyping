@@ -45,7 +45,8 @@ sweet_potato : $(od_output) \
       ./Output/fig/ident_prob.pdf \
       ./Output/fig/supermassa_fits.pdf \
       ./Output/fig/real_data_plots.pdf \
-      ./Output/fig/ufit_features.pdf
+      ./Output/fig/ufit_features.pdf \
+      ./Output/fig/seq_error_example.pdf
 
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
@@ -88,6 +89,11 @@ $(bias_output) : $(shirasawa_snps) ./Analysis/bias_arg.R
 ./Output/fig/snp_examples.pdf : $(shirasawa_snps) ./Analysis/plot_raw.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_raw.R
+
+# Argument for sequencing error rate
+./Output/fig/seq_error_example.pdf : $(shirasawa_snps) ./Analysis/seq_arg.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/seq_arg.R
 
 # Showing the different combinations of sequencing error rate and bias
 ./Output/fig/prob_plots.pdf : $(shirasawa_snps) ./Analysis/possible_probs.R

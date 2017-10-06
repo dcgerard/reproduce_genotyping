@@ -69,9 +69,9 @@ pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A)) +
   theme_bw() +
   xlim(0, maxcount) +
   ylim(0, maxcount) +
-  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 2) +
   theme(strip.background = element_rect(fill = "white"),
         legend.position = "none") +
+  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 8) +
   xlab("Counts a") +
   ylab("Counts A") +
   scale_size_continuous(range = c(0.4, 1))
