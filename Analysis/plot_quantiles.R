@@ -26,16 +26,18 @@ get_df_lines <- function(seq_error, bias_val, ploidy) {
     return(df_lines)
 }
 
-df_tot <- bind_rows(get_df_lines(seq_error = seq_error_upper, bias_val = 1, ploidy = 6),
-    get_df_lines(seq_error = 0.01, bias_val = bias_lower, ploidy = 6),
-    get_df_lines(seq_error = 0.01, bias_val = bias_upper, ploidy = 6))
+df_tot <- bind_rows(get_df_lines(seq_error = seq_error_lower, bias_val = 1, ploidy = 6),
+                    get_df_lines(seq_error = seq_error_upper, bias_val = 1, ploidy = 6),
+                    get_df_lines(seq_error = 0.01, bias_val = bias_lower, ploidy = 6),
+                    get_df_lines(seq_error = 0.01, bias_val = bias_upper, ploidy = 6))
 df_tot$bias_seq <- paste0("(", df_tot$bias, ", ", df_tot$seq_error, ")")
-df_tot$description <- c(rep("Seq Upper", ploidy + 1),
+df_tot$description <- c(rep("Seq Lower", ploidy + 1),
+                        rep("Seq Upper", ploidy + 1),
                         rep("Bias Lower", ploidy + 1),
                         rep("Bias Upper", ploidy + 1))
 
 pl <- ggplot(data = df_tot, mapping = aes(x = x, y = y, xend = xend, yend = yend, col = porig)) +
-    facet_grid(. ~ description) +
+    facet_wrap(~ description) +
     geom_segment() +
     theme_bw() +
     theme(strip.background = element_rect(fill = "white"),
@@ -45,6 +47,6 @@ pl <- ggplot(data = df_tot, mapping = aes(x = x, y = y, xend = xend, yend = yend
         ggthemes::scale_color_colorblind(name = "Original\nProbabilities")
 
 pdf(file = "./Output/fig/prior_quantiles.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.1, width = 6.5)
+    family = "Times", height = 3, width = 4)
 print(pl)
 dev.off()
