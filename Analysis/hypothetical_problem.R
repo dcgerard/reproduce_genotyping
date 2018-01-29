@@ -1,5 +1,5 @@
 ## Hypothetical problem.
-set.seed(27)
+set.seed(30)
 library(updog)
 suppressMessages(library(tidyverse))
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
@@ -7,7 +7,7 @@ uout <- readRDS("./Output/updog_fits/uout1.RDS")
 uout$input$ploidy <- 4
 uout$p1geno       <- 4
 uout$p2geno       <- 0
-uout$bias_val     <- 0.5
+uout$bias_val     <- 0.6
 uout$seq_error    <- 0.005
 uout$od_param     <- 0.001
 uout$input$model  <- "f1"
