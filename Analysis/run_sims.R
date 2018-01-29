@@ -22,7 +22,7 @@ one_rep <- function(unew, usame) {
   true_ogeno <- rout$ogeno
 
   ## Run updog -------------------------------------------------
-  bias_start <- exp(-2:2) ## plus to minus three sd
+  bias_start <- exp(-2:2 * 0.7) ## plus to minus three sd
   llike_old <- -Inf
   for (index in 1:length(bias_start)) {
     utemp <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "hw",
