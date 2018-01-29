@@ -1,5 +1,5 @@
 ## Hypothetical problem.
-set.seed(20)
+set.seed(27)
 library(updog)
 suppressMessages(library(tidyverse))
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
@@ -17,9 +17,9 @@ rout <- rupdog(uout)
 
 maxcount <- max(c(rout$input$ocounts, rout$input$osize - rout$input$ocounts))
 
-unew1 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, seq_error_sd = Inf, bias_val_sd = Inf)
+unew1 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, seq_error_sd = Inf, bias_val_sd = Inf, non_mono_max = Inf)
 
-unew2 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, bias_val_sd = Inf)
+unew2 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, bias_val_sd = Inf, non_mono_max = Inf)
 
 unew3 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy)
 
