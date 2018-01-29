@@ -5,8 +5,8 @@ library(updog)
 suppressMessages(library(tidyverse))
 ploidy <- 6
 
-bias_lower <- exp(stats::qnorm(0.025, mean = 0, sd = 1))
-bias_upper <- exp(stats::qnorm(0.975, mean = 0, sd = 1))
+bias_lower <- exp(stats::qnorm(0.025, mean = 0, sd = 0.7))
+bias_upper <- exp(stats::qnorm(0.975, mean = 0, sd = 0.7))
 
 seq_error_lower  <- updog:::expit(stats::qnorm(0.025, mean = -4.7, sd = 1))
 seq_error_median <- updog:::expit(-4.7)

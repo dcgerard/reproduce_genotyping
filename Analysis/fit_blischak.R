@@ -23,5 +23,8 @@ command_text <- paste0("ebg diseq -p ", ploidy, " -n ", nrow(counts_mat), " -l "
                        " -r ./Output/blischak_formatted_data/counts_mat.txt ",
                        "-t ./Output/blischak_formatted_data/size_mat.txt ",
                        "-e ./Output/blischak_formatted_data/seq_error.txt")
-system(command_text)
+btime <- system.time({
+  system(command_text)
+})
 system("mv diseq* ./Output/blischak_formatted_data/")
+saveRDS(btime, "./Output/blischak_formatted_data/btime.RDS")

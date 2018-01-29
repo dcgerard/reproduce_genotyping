@@ -12,14 +12,21 @@ one_rep <- function(index, counts_mat, size_mat, ploidy) {
   psize   <- size_mat[1, index]
   ocounts <- ocounts[!is.na(ocounts)]
   osize   <- osize[!is.na(osize)]
-  uout <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = ploidy,
-                               p1counts = pcounts, p1size = psize, model = "s1")
+  utime <- system.time({
+    uout <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = ploidy,
+                                 p1counts = pcounts, p1size = psize, model = "s1", non_mono_max = Inf)
+  }
+  )
+  uout$time <- utime
   saveRDS(object = uout, file = paste0("./Output/updog_fits/uout", index, ".RDS"))
 }
 
-library(snow)
 library(parallel)
 cl <- makeCluster(detectCores() - 2)
-snow::parSapply(cl = cl, X = 1:ncol(counts_mat), FUN = one_rep,
+parallel::parSapply(cl = cl, X = 1:ncol(counts_mat), FUN = one_rep,
                 counts_mat = counts_mat, size_mat = size_mat, ploidy = ploidy)
 stopCluster(cl)
+
+# for (index in 1:ncol(counts_mat)) {
+#   one_rep(index, counts_mat, size_mat, ploidy)
+# }

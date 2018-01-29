@@ -105,6 +105,11 @@ $(bias_output) : $(shirasawa_snps) ./Analysis/bias_arg.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_updog_fits.R
 
+# Plot computation time of all 1000 updog fits
+./Output/fig/comp_time.pdf : $(ufits) ./Analysis/computation.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/computation.R
+
 # Run ebg on the data using sequencing error rates estimated from updog
 $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 	mkdir -p ./Output/blischak_formatted_data
