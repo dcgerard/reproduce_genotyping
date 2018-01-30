@@ -1,5 +1,5 @@
 ---
-title: "Reproducing Results of Gerard, Ferrao, and Stephens (2017)"
+title: "Reproducing Results of Gerard et al. (2018)"
 bibliography: geno_bib.bib
 output: github_document
 ---
@@ -7,7 +7,7 @@ output: github_document
 # Introduction
 
 This repository contains code to reproduce the empirical evaluations
-of @gerard2017harnessing. The new methods can be found in the
+of @gerard2018harnessing. The new methods can be found in the
 [updog](https://github.com/dcgerard/updog) package.
 
 ```{r, echo=FALSE, results="hide", message=FALSE}
@@ -21,21 +21,22 @@ If you are having trouble reproducing these results, it might be that you need t
 sessionInfo()
 ```
 
-As you can see above, I've also only tried this out on Ubuntu.
+I've also only tried this out on Ubuntu.
 
 If you find a bug, please create an
 [issue](https://github.com/dcgerard/reproduce_genotyping/issues).
 
 # Instructions
 
-To reproduce the results in @gerard2017harnessing, you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
+To reproduce the results in @gerard2018harnessing, you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
 
 ## Install Packages
 
 To install the needed R packages, run the following in R
 
 ```{r, eval = FALSE}
-install.packages(c("tidyverse", "rmutil", "snow", "parallel", "ggthemes", "gridExtra"))
+install.packages(c("tidyverse", "rmutil", "snow", "parallel", 
+                   "ggthemes", "gridExtra", "devtools"))
 devtools::install_github("dcgerard/updog")
 ```
 
@@ -47,13 +48,13 @@ Place [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.o
 
 ## Run Make
 
-To reproduce all of the results in @gerard2017harnessing, simply run
+To reproduce all of the results in @gerard2018harnessing, simply run
 `make` from the terminal. To reproduce the real-data analysis, run
 ``` bash
 make sweet_potato
 ```
 To reproduce the simulations, run
-``` r
+``` bash
 make simulations
 ```
 
@@ -75,7 +76,7 @@ The simulations should take a few hours. You should get some coffee. Here is a l
     
 # Note on SuperMASSA
 
-There appears to be no way to automate [SuperMASSA](http://statgen.esalq.usp.br/SuperMASSA/). As such, I've committed the inputs and fits in the [Output](https://github.com/dcgerard/reproduce_genotyping/tree/master/Output/supermassa_formatted_data) folder. If you want to generate these fits, you'll have to do it manually.
+The [source](https://bitbucket.org/orserang/supermassa) is available for SuperMASSA, but it isn't too well documented, so I used the [web application](http://statgen.esalq.usp.br/SuperMASSA/) version during the empirical data analysis. As such, I've committed the inputs and fits in the [Output](https://github.com/dcgerard/reproduce_genotyping/tree/master/Output/supermassa_formatted_data) folder. If you want to generate these fits, you'll have to do it manually.
 
 # References
 
