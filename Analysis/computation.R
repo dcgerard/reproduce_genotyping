@@ -15,3 +15,5 @@ pl <- ggplot(data = data_frame(time = time_vec), mapping = aes(x = time)) +
 pdf(file = "./Output/fig/comp_time.pdf", family = "Times", colormodel = "cmyk", width = 6, height = 2)
 print(pl)
 dev.off()
+
+cat(paste0("95% Interval of Computation Time: (", paste(round(quantile(time_vec, probs = c(0.025, 0.975)), digits = 2), collapse = ", "), ")"), file = "./Output/text/computation_95.txt")

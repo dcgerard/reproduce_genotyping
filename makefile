@@ -46,7 +46,8 @@ sweet_potato : $(od_output) \
       ./Output/fig/supermassa_fits.pdf \
       ./Output/fig/real_data_plots.pdf \
       ./Output/fig/ufit_features.pdf \
-      ./Output/fig/seq_error_example.pdf
+      ./Output/fig/seq_error_example.pdf \
+      ./Output/fig/comp_time.pdf
 
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
