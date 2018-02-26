@@ -11,7 +11,7 @@ of @gerard2018harnessing. The new methods can be found in the
 [updog](https://github.com/dcgerard/updog) package.
 
 ```{r, echo=FALSE, results="hide", message=FALSE}
-liblist <- list("tidyverse", "updog", "rmutil", "snow", "parallel", "ggthemes", "gridExtra")
+liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra")
 lapply(liblist, require, character.only = TRUE)
 ```
 
