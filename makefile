@@ -51,7 +51,9 @@ sweet_potato : $(od_output) \
 
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
-	      $(sim_plots)
+	      $(sim_plots) \
+	      ./Output/hwe_f1_sims/hwe_f1_sims_out.csv \
+	      ./Output/fig/hwe_s1_prop_correct.pdf
 
 
 # Extract the reference and alternative counts from the shirasawa et al data.
@@ -136,16 +138,26 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_combined.R
 
-# Run Simulations
+# Run Simulations where simulate and fit under HWE.
 ./Output/sims_out/sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_sims.R
 	mkdir -p ./Output/sims_out
 	mkdir -p ./Output/blischak_formatted_data_sims/
 	Rscript ./Analysis/run_sims.R
 
-# Plot simulations
+# Plot simulations where simulate and fit under HWE
 $(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_sims.R
 	mkdir -p ./Output/fig
 	Rscript ./Analysis/plot_sims.R
+
+# Run Simulations where simulate under S1 and fit under both S1 and HWE
+./Output/hwe_f1_sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/hwe_f1_sims.R
+	mkdir -p ./Output/hwe_f1_sims
+	Rscript ./Analysis/hwe_f1_sims.R
+
+# Plot Simulations where simulate under S1 and fit under both S1 and HWE
+./Output/fig/hwe_s1_prop_correct.pdf : ./Output/hwe_f1_sims/hwe_f1_sims_out.csv ./Analysis/hwe_f1_plots.R
+	mkdir -p ./Output/fig
+	Rscript ./Analysis/hwe_f1_plots.R
 
 # Histograms of updog estimates on Shirasawa data
 ./Output/fig/ufit_features.pdf : $(ufits) ./Analysis/shirasawa_data_features.R
