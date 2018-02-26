@@ -111,7 +111,8 @@ pl <- ggplot(data = qdat, mapping = aes(x = pgeno, y = mean, color = method)) +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white")) +
   scale_color_colorblind(name = "Prior",
-                         labels = c("HWE", "S1"))
+                         labels = c("HWE", "S1")) +
+  scale_x_continuous(breaks = c(3, 4, 5))
 
 pdf(file = "./Output/fig/hwe_s1_mse_quant.pdf", colormodel = "cmyk")
 print(pl)
