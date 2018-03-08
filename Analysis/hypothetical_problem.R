@@ -1,7 +1,8 @@
 ## Hypothetical problem.
-set.seed(30)
+set.seed(31)
 library(updog)
 suppressMessages(library(tidyverse))
+library(ggthemes)
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
 
 uout$input$ploidy <- 4
@@ -17,11 +18,18 @@ rout <- rupdog(uout)
 
 maxcount <- max(c(rout$input$ocounts, rout$input$osize - rout$input$ocounts))
 
-unew1 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, seq_error_sd = Inf, bias_val_sd = Inf, non_mono_max = Inf)
+suppressWarnings({
+  unew1 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
+                         ploidy = rout$input$ploidy, seq_error_sd = Inf,
+                         bias_val_sd = Inf, non_mono_max = Inf)
 
-unew2 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy, bias_val_sd = Inf, non_mono_max = Inf)
+  unew2 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
+                         ploidy = rout$input$ploidy, bias_val_sd = Inf, non_mono_max = Inf)
 
-unew3 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize, ploidy = rout$input$ploidy)
+  unew3 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
+                         ploidy = rout$input$ploidy)
+}
+)
 
 ## No labeling -----------------------------------------------------------------------
 dfdat <- data_frame(A = rout$input$ocounts, a = rout$input$osize - rout$input$ocounts)
@@ -87,7 +95,8 @@ pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A, col = geno)) +
   guides(color = guide_legend(title = "Genotype")) +
   scale_color_hue(drop = FALSE) +
   geom_segment(data = df_lines, mapping = aes(x = x, y = y, xend = xend, yend = yend),
-               lty = 2, alpha = 1 / 2, color = "black", size = 0.5)
+               lty = 2, alpha = 1 / 2, color = "black", size = 0.5) +
+  guides(colour = guide_legend(override.aes = list(size=1.5)))
 
 pdf(file = "./Output/fig/ident_prob.pdf", family = "Times", colormodel = "cmyk",
     width = 4, height = 3)

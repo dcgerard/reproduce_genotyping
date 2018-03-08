@@ -2,8 +2,8 @@
 suppressMessages(library(tidyverse))
 dat <- as_data_frame(read.csv("./Output/sims_out/sims_out.csv", row.names = NULL))
 
-longdat <- dat %>% transmute(Blischak = bham, updog = uham, od_param = od_param, bias_val = bias_val) %>%
-  gather(key = "Method", value = "PropCorrect", Blischak:updog)
+longdat <- dat %>% transmute(Li = bham, updog = uham, od_param = od_param, bias_val = bias_val) %>%
+  gather(key = "Method", value = "PropCorrect", Li:updog)
 
 pl <- ggplot(data = longdat, mapping = aes(y = PropCorrect, x = Method)) +
   facet_grid(bias_val ~ od_param) +
@@ -16,8 +16,8 @@ pdf(file = "./Output/fig/prop_correct_box.pdf", family = "Times", colormodel = "
 print(pl)
 dev.off()
 
-longdat <- dat %>% transmute(updog = uham, Blischak = bham, allele_freq = allele_freq, od_param = od_param, bias_val = bias_val) %>%
-  gather(key = "Method", value = "PropCorrect", updog:Blischak)
+longdat <- dat %>% transmute(updog = uham, Li = bham, allele_freq = allele_freq, od_param = od_param, bias_val = bias_val) %>%
+  gather(key = "Method", value = "PropCorrect", updog:Li)
 
 
 pl <- ggplot(data = longdat, mapping = aes(y = PropCorrect, x = allele_freq, color = Method, group = Method)) +
@@ -27,13 +27,14 @@ pl <- ggplot(data = longdat, mapping = aes(y = PropCorrect, x = allele_freq, col
   xlab("Allele Frequency") +
   ylab("Proportion Correct") +
   geom_point(size = 0.1) +
-  geom_smooth(color = "black")
+  geom_smooth(color = "black") +
+  guides(colour = guide_legend(override.aes = list(size=1.5)))
 pdf(file = "./Output/fig/prop_correct_lines.pdf", family = "Times", colormodel = "cmyk")
 print(pl)
 dev.off()
 
-longdat <- dat %>% transmute(Blischak = ballele_freq, updog = uallele_freq, allele_freq = allele_freq, od_param = od_param, bias_val = bias_val) %>%
-  gather(key = "Method", value = "est_allele_freq", Blischak:updog)
+longdat <- dat %>% transmute(Li = ballele_freq, updog = uallele_freq, allele_freq = allele_freq, od_param = od_param, bias_val = bias_val) %>%
+  gather(key = "Method", value = "est_allele_freq", Li:updog)
 
 pl <- ggplot(data = longdat, mapping = aes(y = est_allele_freq, x = allele_freq, color = Method, group = Method)) +
   facet_grid(bias_val ~ od_param) +
@@ -43,7 +44,8 @@ pl <- ggplot(data = longdat, mapping = aes(y = est_allele_freq, x = allele_freq,
   ylab("Estimated Allele Frequency") +
   geom_point(size = 0.1) +
   geom_smooth(color = "black") +
-  geom_abline(intercept = 0, slope = 1, lty = 2, alpha = 1/2)
+  geom_abline(intercept = 0, slope = 1, lty = 2, alpha = 1/2) +
+  guides(colour = guide_legend(override.aes = list(size=1.5)))
 pdf(file = "./Output/fig/allele_freq_est.pdf", family = "Times", colormodel = "cmyk")
 print(pl)
 dev.off()

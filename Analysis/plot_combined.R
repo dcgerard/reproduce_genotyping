@@ -138,7 +138,9 @@ pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha =
   xlab("Counts a") +
   ylab("Counts A") +
   scale_alpha_continuous(name = "Probability\nNon-outlier") +
-  scale_color_manual(name = "Estimated\nGenotype", values = possible_colors)
+  scale_color_manual(name = "Estimated\nGenotype", values = possible_colors) +
+  guides(colour = guide_legend(override.aes = list(size=1.5)),
+         alpha = guide_legend(override.aes = list(size=1.5)))
 
 pdf(file = "./Output/fig/real_data_plots.pdf", colormodel = "cmyk", family = "Times",
     height = 5.5, width = 6.5)
