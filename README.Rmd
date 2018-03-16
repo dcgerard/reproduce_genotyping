@@ -10,7 +10,7 @@ This repository contains code to reproduce the empirical evaluations
 of @gerard2018harnessing. The new methods can be found in the
 [updog](https://github.com/dcgerard/updog) package.
 
-```{r, echo=FALSE, results="hide", message=FALSE}
+```{r, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
 liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra")
 lapply(liblist, require, character.only = TRUE)
 ```
