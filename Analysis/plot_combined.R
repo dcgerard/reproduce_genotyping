@@ -18,7 +18,7 @@ for (index in 1:3) {
   snpdat$snp  <- paste0("SNP", index)
 
   maxcount <- 373
-  pk <- get_pvec(ploidy = ploidy, bias_val = 1, seq_error = 0)
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = 1, eps = 0)
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
@@ -58,7 +58,7 @@ for (index in 1:3) {
 
 
   maxcount <- max(max(count_mat[, 1:3], na.rm = TRUE), max(size_mat[, 1:3] - count_mat[, 1:3], na.rm = TRUE))
-  pk <- get_pvec(ploidy = ploidy, bias_val = 1, seq_error = seq_error[index, 1])
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = 1, eps = seq_error[index, 1])
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
@@ -91,21 +91,27 @@ colnames(summaries_mat) <- c("A", "a", "seq_error", "bias_val",
                              "od_param", "out_prop", "ogeno", "prob_ok", "snp")
 for (index in 1:3) {
   uout <- readRDS(paste0("./Output/updog_fits/uout", index, ".RDS"))
-  dfdat <- data.frame(A = uout$input$ocounts, a = uout$input$osize - uout$input$ocounts,
-                      geno = uout$ogeno,
-                      prob_ok = uout$prob_ok)
+  dfdat <- data.frame(A       = uout$input$refvec, 
+                      a       = uout$input$sizevec- uout$input$refvec,
+                      geno    = uout$geno,
+                      prob_ok = 1 - uout$prob_outlier)
   dfdat$snp <- paste0("SNP", index)
 
-  pk <- get_pvec(ploidy = ploidy, bias_val = uout$bias_val, seq_error = uout$seq_error)
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, eps = uout$seq, h = uout$bias)
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
   df_lines <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
   df_lines$snp <- paste0("SNP", index)
 
-  summaries_mat[index, ] <- c(uout$input$p1counts, uout$input$p1size - uout$input$p1counts,
-                              uout$seq_error, uout$bias_val,
-                              uout$od_param, uout$out_prop, uout$p1geno, 1 - uout$p1_prob_out,
+  summaries_mat[index, ] <- c(uout$input$p1ref, 
+                              uout$input$p1size - uout$input$p1ref,
+                              uout$seq, 
+                              uout$bias,
+                              uout$od, 
+                              uout$out_prop, 
+                              uout$par$pgeno, 
+                              1,
                               index)
 
   if(index == 1) {

@@ -1,21 +1,21 @@
 library(updog)
 suppressMessages(library(tidyverse))
 numfiles <- length(list.files("./Output/updog_fits/"))
-parmat <- matrix(NA, nrow = numfiles, ncol = 6)
-colnames(parmat) <- c("bias", "seq_error", "od", "pgeno", "out_prop", "allele_freq")
+parmat <- matrix(NA, nrow = numfiles, ncol = 5)
+colnames(parmat) <- c("bias", "seq", "od", "pgeno", "out_prop")
 for (index in 1:numfiles) {
   uout <- readRDS(paste0("./Output/updog_fits/uout", index, ".RDS"))
-  parmat[index, 1] <- uout$bias_val
-  parmat[index, 2] <- uout$seq_error
-  parmat[index, 3] <- uout$od_param
-  parmat[index, 4] <- uout$p1geno
+  parmat[index, 1] <- uout$bias
+  parmat[index, 2] <- uout$seq
+  parmat[index, 3] <- uout$od
+  parmat[index, 4] <- uout$par$pgeno
   parmat[index, 5] <- uout$out_prop
-  parmat[index, 6] <- uout$allele_freq
 }
 pardat <- as_data_frame(parmat)
+saveRDS(object = pardat, file = "./Output/shirasawa_snps/shir_features.RDS")
 
 longdat <- pardat %>% mutate(logbias = log2(bias)) %>%
-  select("Overdispersion" = od, "Log2-Bias" = logbias, "Sequencing Error" = seq_error, "Outlier Proportion" = out_prop) %>%
+  select("Overdispersion" = od, "Log2-Bias" = logbias, "Sequencing Error" = seq, "Outlier Proportion" = out_prop) %>%
   gather(key = "Parameter", value = "Value")
 pl <- ggplot(data = longdat, mapping = aes(x = Value)) +
   geom_histogram(bins = 20, fill = "white", color = "black") +

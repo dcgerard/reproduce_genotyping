@@ -1,62 +1,70 @@
 ## Simulate under F1 but fit both F1 and HWE
 one_rep <- function(usame, unew) {
   set.seed(unew$seed)
-  usim             <- usame
-  usim$bias_val    <- unew$bias
-  usim$od_param    <- unew$od
-  usim$input$osize <- unew$input$osize
-  usim$p1geno      <- unew$pgeno
-  usim$p2geno      <- unew$pgeno
+  usim         <- usame
+  usim$bias    <- unew$bias
+  usim$od      <- unew$od
+  usim$sizevec <- unew$sizevec
+  usim$p1geno  <- unew$pgeno
 
   ## Simulate new data
-  rout <- updog::rupdog(usim)
-  ocounts    <- rout$input$ocounts
-  osize      <- rout$input$osize
-  true_ogeno <- rout$ogeno
+  true_geno  <- updog::rgeno(n      = length(usim$sizevec), 
+                             ploidy = usim$ploidy,
+                             model  = "s1", 
+                             p1geno = usim$p1geno)
+  refvec <- updog::rflexdog(sizevec = usim$sizevec, 
+                            geno    = true_geno, 
+                            ploidy  = usim$ploidy, 
+                            seq     = usim$seq_error, 
+                            bias    = usim$bias,
+                            od      = usim$od)
+  sizevec <- usim$sizevec
 
   ## run updog assuming HWE
-  bias_start <- exp(-2:2 * 0.7) ## plus to minus three sd
-  llike_old <- -Inf
-  for (index in 1:length(bias_start)) {
-    utemp <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "hw",
-                                  out_prop = 0, update_outprop = FALSE, bias_val = bias_start[index], non_mono_max = Inf)
-    if (utemp$llike > llike_old) {
-      uout <- utemp
-      llike_old <- uout$llike
-    }
-  }
+  uout <- updog::flexdog(refvec  = refvec,
+                         sizevec = sizevec, 
+                         ploidy  = usim$ploidy, 
+                         model   = "hw",
+                         verbose = FALSE)
 
   ## run updog assuming S1
-  us1_out  <- updog::updog(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "s1", out_prop = 0,
-                           update_outprop = FALSE, non_mono_max = Inf)
+  us1_out  <- updog::flexdog(refvec  = refvec,
+                             sizevec = sizevec,
+                             ploidy  = usim$ploidy,
+                             model   = "s1",
+                             verbose = FALSE)
 
   ## Summaries
   parout <- rep(NA, length = 16)
 
-  parout[1] <- mean(us1_out$ogeno == rout$ogeno, na.rm = TRUE)
-  parout[2] <- mean(uout$ogeno == rout$ogeno, na.rm = TRUE)
+  parout[1] <- mean(us1_out$geno == true_geno, na.rm = TRUE)
+  parout[2] <- mean(uout$geno == true_geno, na.rm = TRUE)
 
-  parout[3] <- mean((us1_out$postmean - rout$ogeno)^2, na.rm = TRUE)
-  parout[4] <- mean((uout$postmean - rout$ogeno)^2, na.rm = TRUE)
+  parout[3] <- mean((us1_out$postmean - true_geno)^2, na.rm = TRUE)
+  parout[4] <- mean((uout$postmean - true_geno)^2, na.rm = TRUE)
 
-  parout[5] <- rout$p1geno
-  parout[6] <- us1_out$p1geno
-  parout[7] <- uout$allele_freq
+  parout[5] <- usim$p1geno
+  parout[6] <- us1_out$par$pgeno
+  parout[7] <- uout$par$alpha
 
-  parout[8] <- rout$od_param
-  parout[9] <- us1_out$od_param
-  parout[10] <- uout$od_param
+  parout[8] <- usim$od
+  parout[9] <- us1_out$od
+  parout[10] <- uout$od
 
-  parout[11] <- rout$bias_val
-  parout[12] <- us1_out$bias_val
-  parout[13] <- uout$bias_val
+  parout[11] <- usim$bias
+  parout[12] <- us1_out$bias
+  parout[13] <- uout$bias
 
-  parout[14] <- rout$seq_error
-  parout[15] <- us1_out$seq_error
-  parout[16] <- uout$seq_error
+  parout[14] <- usim$seq_error
+  parout[15] <- us1_out$seq
+  parout[16] <- uout$seq
+  
+  parout[17] <- unew$seed
 
-  names(parout) <- c("sham", "hham", "smse", "hmse", "pgeno", "spgeno", "hallele_freq",
-                     "od", "sod", "hod", "bias", "sbias", "hbias", "seq", "sseq", "hseq")
+  names(parout) <- c("sham", "hham", "smse", "hmse", 
+                     "pgeno", "spgeno", "hallele_freq",
+                     "od", "sod", "hod", "bias", "sbias", 
+                     "hbias", "seq", "sseq", "hseq", "seed")
 
   return(parout)
 }
@@ -65,17 +73,21 @@ library(updog)
 ploidy <- 6
 pvals <- c(5, 4, 3)
 qarray <- get_q_array(ploidy)
-bias_seq  <- c(1, 0.75, 0.5, 0.25)
+bias_seq  <- c(1, 0.75, 0.5)
 seq_error <- 0.005 ## Constant throughout
-out_prop  <- 0
-od_seq    <- c(0, 0.01, 0.05)
+od_seq    <- c(0, 0.01, 0.02)
 itermax   <- 1000
 
 ## Read in size data to get realistic size distribution --------------------------------
 size_mat   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)
 
 parvals       <- expand.grid(pgeno = pvals, bias = bias_seq, seq = seq_error, od = od_seq, seed = 1:itermax)
-parvals$osize <- sapply(size_mat[, 1:itermax], function(x) x[!is.na(x)])
+parvals$sizevec <- sapply(size_mat[, 1:itermax], function(x) x[!is.na(x)])
+
+## Reorder so that computation isn't heavy loaded on some cores
+set.seed(1)
+par_order <- sample(1:nrow(parvals))
+parvals <- parvals[par_order, ]
 
 par_list <- list()
 for (list_index in 1:nrow(parvals)) {
@@ -87,19 +99,13 @@ for (list_index in 1:nrow(parvals)) {
 }
 
 for (list_index in 1:nrow(parvals)) {
-  par_list[[list_index]]$input$osize <- parvals$osize[[list_index]]
+  par_list[[list_index]]$sizevec <- parvals$sizevec[[list_index]]
 }
 
 ## These parameters do not change
-usame <- list()
-usame$seq_error    <- seq_error
-usame$input$ploidy <- ploidy
-usame$out_prop     <- out_prop
-class(usame)       <- "updog"
-usame$input$model  <- "s1"
-usame$out_mean     <- 1/2
-usame$out_disp     <- 1/3
-usame$allele_freq  <- -1
+usame           <- list()
+usame$seq_error <- seq_error
+usame$ploidy    <- ploidy
 
 ## Run method
 

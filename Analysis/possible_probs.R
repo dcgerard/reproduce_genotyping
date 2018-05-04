@@ -12,8 +12,9 @@ for (bindex in 1:length(bias_vec)) {
     bias <- bias_vec[bindex]
     for (sindex in 1:length(seq_error_vec)) {
         seq_error <- seq_error_vec[sindex]
-        pvec <- updog::get_pvec(ploidy = ploidy, bias_val = bias,
-                                seq_error = seq_error)
+        pvec <- updog:::xi_fun(p   = (0:ploidy) / ploidy, 
+                               h   = bias,
+                               eps = seq_error)
         slopevec <- pvec / (1 - pvec)
         xend <- pmin(rep(1, ploidy + 1), 1 / slopevec)
         yend <- pmin(rep(1, ploidy + 1), 1 * slopevec)

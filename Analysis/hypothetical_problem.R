@@ -1,42 +1,65 @@
 ## Hypothetical problem.
-set.seed(31)
+
+set.seed(2)
 library(updog)
 suppressMessages(library(tidyverse))
 library(ggthemes)
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
+sizevec <- uout$input$sizevec
+nind <- length(sizevec)
 
-uout$input$ploidy <- 4
-uout$p1geno       <- 4
-uout$p2geno       <- 0
-uout$bias_val     <- 0.6
-uout$seq_error    <- 0.005
-uout$od_param     <- 0.001
-uout$input$model  <- "f1"
-ploidy            <- 4
+ploidy    <- 4
+p1geno    <- 4
+p2geno    <- 0
+bias      <- 0.8
+seq_error <- 0.005
+od        <- 0.01
+model     <- "f1"
+ploidy    <- 4
 
-rout <- rupdog(uout)
+geno_vec <- rgeno(n      = nind, 
+                  ploidy = ploidy, 
+                  model  = model, 
+                  p1geno = p1geno,
+                  p2geno = p2geno)
 
-maxcount <- max(c(rout$input$ocounts, rout$input$osize - rout$input$ocounts))
+refvec <- rflexdog(sizevec = sizevec, 
+                   geno    = geno_vec, 
+                   ploidy  = ploidy, 
+                   seq     = seq_error,
+                   bias    = bias, 
+                   od      = od)
 
-suppressWarnings({
-  unew1 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
-                         ploidy = rout$input$ploidy, seq_error_sd = Inf,
-                         bias_val_sd = Inf, non_mono_max = Inf)
+maxcount <- max(c(refvec, sizevec - refvec))
 
-  unew2 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
-                         ploidy = rout$input$ploidy, bias_val_sd = Inf, non_mono_max = Inf)
 
-  unew3 <- updog_vanilla(ocounts = rout$input$ocounts, osize = rout$input$osize,
-                         ploidy = rout$input$ploidy)
-}
-)
+unew1 <- flexdog(refvec   = refvec, 
+                 sizevec  = sizevec, 
+                 ploidy   = ploidy,
+                 model    = "f1", 
+                 var_seq  = Inf, 
+                 var_bias = Inf,
+                 verbose  = FALSE)
+
+unew2 <- flexdog(refvec   = refvec, 
+                 sizevec  = sizevec, 
+                 ploidy   = ploidy,
+                 model    = "f1", 
+                 var_bias = Inf,
+                 verbose  = FALSE)
+
+unew3 <- flexdog(refvec   = refvec, 
+                 sizevec  = sizevec, 
+                 ploidy   = ploidy,
+                 model    = "f1",
+                 verbose  = FALSE)
 
 ## No labeling -----------------------------------------------------------------------
-dfdat <- data_frame(A = rout$input$ocounts, a = rout$input$osize - rout$input$ocounts)
+dfdat <- data_frame(A = refvec, a = sizevec - refvec)
 dfdat$geno <- NA
 dfdat$type <- "A"
 
-pk <- get_pvec(ploidy = ploidy, bias_val = 1, seq_error = 0)
+pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, eps = 0, h = 1)
 slopevec <- pk/(1 - pk)
 xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
 yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
@@ -44,11 +67,11 @@ df_lines <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xe
 df_lines$type <- "A"
 
 ## No penalty on either --------------------------------------------------------------
-dftemp <- data_frame(A = unew1$input$ocounts, a = unew1$input$osize - unew1$input$ocounts, geno = unew1$ogeno)
+dftemp <- data_frame(A = unew1$input$refvec, a = unew1$input$sizevec - unew1$input$refvec, geno = unew1$geno)
 dftemp$type <- "B"
 dfdat <- bind_rows(dfdat, dftemp)
 
-pk <- get_pvec(ploidy = ploidy, bias_val = unew1$bias_val, seq_error = unew1$seq_error)
+pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew1$bias, eps = unew1$seq)
 slopevec <- pk/(1 - pk)
 xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
 yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
@@ -57,11 +80,11 @@ df_lines_temp$type <- "B"
 df_lines <- bind_rows(df_lines, df_lines_temp)
 
 ## Penalty only on sequencing error rate ---------------------------------------------
-dftemp <- data_frame(A = unew2$input$ocounts, a = unew2$input$osize - unew2$input$ocounts, geno = unew2$ogeno)
+dftemp <- data_frame(A = unew2$input$refvec, a = unew2$input$sizevec - unew2$input$refvec, geno = unew2$geno)
 dftemp$type <- "C"
 dfdat <- bind_rows(dfdat, dftemp)
 
-pk <- get_pvec(ploidy = ploidy, bias_val = unew2$bias_val, seq_error = unew2$seq_error)
+pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew2$bias, eps = unew2$seq)
 slopevec <- pk/(1 - pk)
 xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
 yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
@@ -70,11 +93,11 @@ df_lines_temp$type <- "C"
 df_lines <- bind_rows(df_lines, df_lines_temp)
 
 ## Penalty on both bias and sequencing error rate -----------------------------------
-dftemp <- data_frame(A = unew3$input$ocounts, a = unew3$input$osize - unew3$input$ocounts, geno = unew3$ogeno)
+dftemp <- data_frame(A = unew3$input$refvec, a = unew3$input$sizevec - unew3$input$refvec, geno = unew3$geno)
 dftemp$type <- "D"
 dfdat <- bind_rows(dfdat, dftemp)
 
-pk <- get_pvec(ploidy = ploidy, bias_val = unew3$bias_val, seq_error = unew3$seq_error)
+pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew3$bias, eps = unew3$seq)
 slopevec <- pk/(1 - pk)
 xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
 yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)

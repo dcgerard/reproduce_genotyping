@@ -64,16 +64,16 @@ pl <- ggplot(data = dat_counts, mapping = aes(x = a, y = A, col = bad_ocounts)) 
         size = 0.5) +
     ggthemes::scale_color_colorblind(guide = FALSE)
 
-colvec <- ggthemes::colorblind_pal()(4)
+colvec <- ggthemes::colorblind_pal()(7)
 
 pl <- pl + geom_line(data = dat5, mapping = aes(x = alower, y = Alower),
-    color = colvec[3], lty = 1, alpha = 1 / 2)
+    color = colvec[3], lty = 1, alpha = 1)
 pl <- pl + geom_line(data = dat5, mapping = aes(x = aupper, y = Aupper),
-    color = colvec[3], lty = 1, alpha = 1 / 2)
+    color = colvec[3], lty = 1, alpha = 1)
 pl <- pl + geom_line(data = dat4, mapping = aes(x = alower, y = Alower),
-    color = colvec[4], lty = 1, alpha = 1 / 2)
+    color = colvec[7], lty = 1, alpha = 1)
 pl <- pl + geom_line(data = dat4, mapping = aes(x = aupper, y = Aupper),
-    color = colvec[4], lty = 1, alpha = 1 / 2)
+    color = colvec[7], lty = 1, alpha = 1)
 
 pdf(file = "./Output/fig/od_arg.pdf", colormodel = "cmyk",
     family = "Times", height = 3, width = 3)

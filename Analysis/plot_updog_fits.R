@@ -14,21 +14,21 @@ colnames(summaries_mat) <- c("A", "a", "seq_error", "bias_val",
 
 for (index in 1:3) {
   uout <- readRDS(paste0("./Output/updog_fits/uout", index, ".RDS"))
-  dfdat <- data_frame(A = uout$input$ocounts, a = uout$input$osize - uout$input$ocounts,
-                      ogeno = factor(uout$ogeno, levels = 0:ploidy),
-                      prob_ok = uout$prob_ok)
+  dfdat <- data_frame(A = uout$input$refvec, a = uout$input$sizevec - uout$input$refvec,
+                      ogeno = factor(uout$geno, levels = 0:ploidy),
+                      prob_ok = 1 - uout$prob_outlier)
   dfdat$snp <- paste0("SNP", index)
 
-  pk <- get_pvec(ploidy = ploidy, bias_val = uout$bias_val, seq_error = uout$seq_error)
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = uout$bias, eps = uout$seq)
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
   df_lines <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
   df_lines$snp <- paste0("SNP", index)
 
-  summaries_mat[index, ] <- c(uout$input$p1counts, uout$input$p1size - uout$input$p1counts,
-                              uout$seq_error, uout$bias_val,
-                              uout$od_param, uout$out_prop, uout$p1geno, 1 - uout$p1_prob_out,
+  summaries_mat[index, ] <- c(uout$input$p1ref, uout$input$p1size - uout$input$p1ref,
+                              uout$seq, uout$bias,
+                              uout$od, uout$out_prop, uout$par$pgeno, 1,
                               index)
 
   if(index == 1) {

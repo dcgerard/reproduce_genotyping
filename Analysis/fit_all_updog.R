@@ -13,19 +13,30 @@ one_rep <- function(index, counts_mat, size_mat, ploidy) {
   psize   <- size_mat[1, index]
   ocounts <- ocounts[!is.na(ocounts)]
   osize   <- osize[!is.na(osize)]
-  utime <- system.time({
-    uout <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = ploidy,
-                                 p1counts = pcounts, p1size = psize, model = "s1", non_mono_max = Inf)
+  utime   <- system.time({
+    uout <- updog::flexdog(refvec   = ocounts, 
+                           sizevec  = osize,
+                           ploidy   = ploidy,
+                           p1ref    = pcounts, 
+                           p1size   = psize, 
+                           model    = "s1",
+                           outliers = TRUE,
+                           verbose  = FALSE)
   }
   )
   uout$time <- utime
-  saveRDS(object = uout, file = paste0("./Output/updog_fits/uout", index, ".RDS"))
+  saveRDS(object = uout, 
+          file   = paste0("./Output/updog_fits/uout", index, ".RDS"))
 }
 
 library(parallel)
 cl <- makeCluster(detectCores() - 2)
-parallel::parSapply(cl = cl, X = 1:ncol(counts_mat), FUN = one_rep,
-                counts_mat = counts_mat, size_mat = size_mat, ploidy = ploidy)
+parallel::parSapply(cl         = cl, 
+                    X          = 1:ncol(counts_mat), 
+                    FUN        = one_rep,
+                    counts_mat = counts_mat, 
+                    size_mat   = size_mat,
+                    ploidy     = ploidy)
 stopCluster(cl)
 
 # for (index in 1:ncol(counts_mat)) {

@@ -1,5 +1,5 @@
 ## Argument for modeling sequencing error
-library(updog)
+library(updogAlpha)
 suppressMessages(library(tidyverse))
 library(ggthemes)
 

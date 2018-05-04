@@ -14,8 +14,9 @@ seq_error_upper <- updog:::expit(stats::qnorm(0.975, mean = -4.7, sd = 1))
 
 get_df_lines <- function(seq_error, bias_val, ploidy) {
     porig <- as.factor(paste0(0:ploidy, "/", ploidy))
-    pvec <- updog::get_pvec(ploidy = ploidy, bias_val = bias_val,
-        seq_error = seq_error)
+    pvec <- updog:::xi_fun(p = (0:ploidy) / ploidy, 
+                           h = bias_val,
+                           eps = seq_error)
     slopevec <- pvec / (1 - pvec)
     xend <- pmin(rep(1, ploidy + 1), 1 / slopevec)
     yend <- pmin(rep(1, ploidy + 1), 1 * slopevec)

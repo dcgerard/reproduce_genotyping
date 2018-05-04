@@ -18,7 +18,7 @@ for (index in 1:3) {
   snpdat$snp  <- paste0("SNP", index)
 
   maxcount <- 373
-  pk <- get_pvec(ploidy = ploidy, bias_val = 1, seq_error = 0)
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = 1, eps = 0)
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)

@@ -12,7 +12,7 @@ of @gerard2018harnessing. The new methods can be found in the
 [updog](https://github.com/dcgerard/updog) package.
 
 ```{r, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra")
+liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra", "updogAlpha")
 lapply(liblist, require, character.only = TRUE)
 ```
 
@@ -39,6 +39,7 @@ To install the needed R packages, run the following in R
 install.packages(c("tidyverse", "rmutil", "snow", "parallel", 
                    "ggthemes", "gridExtra", "devtools"))
 devtools::install_github("dcgerard/updog")
+devtools::install_github("dcgerard/updogAlpha")
 ```
 
 Please follow the directions [here](https://github.com/pblischak/polyploid-genotyping/tree/master/ebg) to install `ebg`.

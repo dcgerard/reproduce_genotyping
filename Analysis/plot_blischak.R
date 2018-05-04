@@ -22,7 +22,7 @@ for (index in 1:3) {
 
 
   maxcount <- max(max(count_mat[, 1:3], na.rm = TRUE), max(size_mat[, 1:3] - count_mat[, 1:3], na.rm = TRUE))
-  pk <- get_pvec(ploidy = ploidy, bias_val = 1, seq_error = seq_error[index, 1])
+  pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = 1, eps = seq_error[index, 1])
   slopevec <- pk/(1 - pk)
   xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
   yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)

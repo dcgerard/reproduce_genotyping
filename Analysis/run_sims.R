@@ -4,44 +4,42 @@ set.seed(25346)
 ## Simulation Function ---------------------------------------------------------
 one_rep <- function(unew, usame) {
 
-  err_file_name <- paste0("./Output/blischak_formatted_data_sims/err", unew$seed, ".txt")
-  zz <- file(err_file_name, open = "wt")
-  sink(zz, type = "message")
-  try({
   set.seed(unew$seed)
   usim             <- usame
-  usim$bias_val    <- unew$bias_val
+  usim$bias        <- unew$bias
   usim$allele_freq <- unew$allele_freq
-  usim$od_param    <- unew$od_param
-  usim$input$osize <- unew$input$osize
+  usim$od          <- unew$od
+  usim$sizevec     <- unew$sizevec
 
   ## Simulate New Data ----------------------------------------------
-  rout       <- updog::rupdog(usim)
-  ocounts    <- rout$input$ocounts
-  osize      <- rout$input$osize
-  true_ogeno <- rout$ogeno
+  true_geno  <- updog::rgeno(n           = length(usim$sizevec), 
+                             ploidy      = usim$ploidy, 
+                             model       = "hw",
+                             allele_freq = usim$allele_freq)
+  refvec     <- updog::rflexdog(sizevec = usim$sizevec, 
+                                geno    = true_geno, 
+                                ploidy  = usim$ploidy, 
+                                seq     = usim$seq_error, 
+                                bias    = usim$bias, 
+                                od      = usim$od)
+  sizevec    <- usim$sizevec
 
   ## Run updog -------------------------------------------------
-  bias_start <- exp(-2:2 * 0.7) ## plus to minus three sd
-  llike_old <- -Inf
-  for (index in 1:length(bias_start)) {
-    utemp <- updog::updog_vanilla(ocounts = ocounts, osize = osize, ploidy = usim$input$ploidy, model = "hw",
-                                 out_prop = 0, update_outprop = FALSE, bias_val = bias_start[index], non_mono_max = Inf)
-    if (utemp$llike > llike_old) {
-      uout <- utemp
-      llike_old <- uout$llike
-    }
-  }
+  uout <- updog::flexdog(refvec  = refvec, 
+                         sizevec = sizevec, 
+                         ploidy  = usim$ploidy, 
+                         model   = "hw", 
+                         verbose = FALSE)
 
   ## Run Blischak -----------------------------------------------------------------------
   osize_file <- paste0("./Output/blischak_formatted_data_sims/size", unew$seed, ".txt")
   ocounts_file <- paste0("./Output/blischak_formatted_data_sims/counts", unew$seed, ".txt")
   seq_file <- paste0("./Output/blischak_formatted_data_sims/seq_error", unew$seed, ".txt")
   prefix <- paste0("hwe", unew$seed)
-  write.table(matrix(osize), osize_file, row.names = FALSE, col.names = FALSE)
-  write.table(matrix(ocounts), ocounts_file, row.names = FALSE, col.names = FALSE)
-  write.table(matrix(usame$seq_error), seq_file, row.names = FALSE, col.names = FALSE)
-  command_text <- paste0("ebg hwe -p ", usim$input$ploidy, " -n ", length(ocounts), " -l ", 1,
+  write.table(matrix(sizevec), osize_file, row.names = FALSE, col.names = FALSE)
+  write.table(matrix(refvec), ocounts_file, row.names = FALSE, col.names = FALSE)
+  write.table(matrix(usim$seq_error), seq_file, row.names = FALSE, col.names = FALSE)
+  command_text <- paste0("ebg hwe -p ", usim$ploidy, " -n ", length(refvec), " -l ", 1,
                          " -r ", ocounts_file,
                          " -t ", osize_file,
                          " -e ", seq_file,
@@ -68,32 +66,63 @@ one_rep <- function(unew, usame) {
   system(paste0("rm ", ocounts_file))
   system(paste0("rm ", seq_file))
 
+  ## Run fitPoly on default settings.
+  fitpoly_df <- data.frame(MarkerName = "SNP",
+                           SampleName = 1:length(refvec),
+                           ratio = refvec / sizevec)
+  fp_out <- fitPoly::fitOneMarker(ploidy = usim$ploidy,
+                                  marker = "SNP",
+                                  data = fitpoly_df)
+
   ## Summary Quantities
-  parout     <- rep(NA, length = 14)
-  parout[1]  <- mean(bgeno == rout$ogeno, na.rm = TRUE)
-  parout[2]  <- mean(uout$ogeno == rout$ogeno, na.rm = TRUE)
-  parout[3]  <- sum((bgeno - rout$ogeno) ^ 2, na.rm = TRUE) / sum(!is.na(rout$ogeno) & !is.na(bgeno))
-  parout[4]  <- sum((uout$ogeno - rout$ogeno) ^ 2, na.rm = TRUE) / sum(!is.na(rout$ogeno) & !is.na(uout$ogeno))
-  parout[5]  <- mean(abs(uout$postmean - uout$ogeno))
-  parout[6]  <- rout$allele_freq
-  parout[7]  <- uout$allele_freq
+  parout     <- rep(NA, length = 25)
+  parout[1]  <- mean(bgeno == true_geno, na.rm = TRUE)
+  parout[2]  <- mean(uout$geno == true_geno, na.rm = TRUE)
+  parout[3]  <- sum((bgeno - true_geno) ^ 2, na.rm = TRUE) / sum(!is.na(true_geno) & !is.na(bgeno))
+  parout[4]  <- sum((uout$geno - true_geno) ^ 2, na.rm = TRUE) / sum(!is.na(true_geno) & !is.na(uout$geno))
+  parout[5]  <- mean(abs(uout$postmean - true_geno))
+  parout[6]  <- usim$allele_freq
+  parout[7]  <- uout$par$alpha
   parout[8]  <- ballele_freq
-  parout[9]  <- rout$od_param
-  parout[10] <- uout$od_param
-  parout[11] <- rout$bias_val
-  parout[12] <- uout$bias_val
-  parout[13] <- rout$seq_error
-  parout[14] <- uout$seq_error
-  names(parout) <- c("bham", "uham", "bmse", "umse", "umean_mse", "allele_freq", "uallele_freq", "ballele_freq",
-                     "od_param", "uod_param", "bias_val", "ubias_val", "seq_error", "useq_error")
-
-  ## only errors below this are not recorded
-  sink(type="message")
-  close(zz)
-  system(paste0("rm ", err_file_name))
-
+  parout[9]  <- usim$od
+  parout[10] <- uout$od
+  parout[11] <- usim$bias
+  parout[12] <- uout$bias
+  parout[13] <- usim$seq_error
+  parout[14] <- uout$seq
+  if (any(!is.na(fp_out$scores))) {
+    parout[15] <- mean(fp_out$scores$maxgeno == true_geno, na.rm = TRUE)
+    parout[16] <- sum((fp_out$scores$maxgeno - true_geno) ^ 2, na.rm = TRUE) / sum(!is.na(true_geno) & !is.na(fp_out$scores$maxgeno))
+    parout[17] <- 1 - mean(fp_out$scores$maxP, na.rm = TRUE)
+    parout[18] <- stats::cor(x = fp_out$scores$maxgeno, y = true_geno, use = "complete.obs")
+    
+    fp_out$scores$P1 +
+      fp_out$scores$P2 * 2 +
+      fp_out$scores$P3 * 3 +
+      fp_out$scores$P4 * 4 +
+      fp_out$scores$P5 * 5 +
+      fp_out$scores$P6 * 6 ->
+      fp_pm
+    
+    parout[19] <- stats::cor(x = fp_pm, y = true_geno, use = "complete.obs")
+    
+  } else {
+    parout[15:19] <- NA
+  }
+  parout[20] <- uout$prop_mis
+  parout[21] <- stats::cor(x = uout$geno, y = true_geno, use = "complete.obs")
+  parout[22] <- stats::cor(x = uout$postmean, y = true_geno, use = "complete.obs")
+  parout[23] <- stats::cor(x = bgeno, y = true_geno, use = "complete.obs")
+  parout[24] <- stats::cor(x = refvec / sizevec, y = true_geno, use = "complete.obs")
+  parout[25] <- unew$seed
+  names(parout) <- c("bham", "uham", "bmse", "umse",
+                     "umean_mse", "allele_freq", "uallele_freq",
+                     "ballele_freq", "od_param", "uod_param", "bias_val",
+                     "ubias_val", "seq_error", "useq_error",
+                     "fpham", "fpmse", "fpepm", "fpcor", "fpcor_pm",
+                     "uepm", "ucor", "ucor_pm", "bcor", "naive_cor",
+                     "seed")
   return(parout)
-  })
 }
 
 ## Read in size data to get realistic size distribution --------------------------------
@@ -101,30 +130,28 @@ size_mat   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.nam
 
 
 ## Parameters to explore --------------------------------------------
-bias_seq  <- c(1, 0.75, 0.5, 0.25)
+bias_seq  <- c(1, 0.75, 0.5)
 seq_error <- 0.005 ## Constant throughout
 out_prop  <- 0
-od_seq    <- c(0, 0.01, 0.05)
+od_seq    <- c(0, 0.01, 0.02)
 ploidy    <- 6
 itermax   <- 1000
 
 ## Set up `updog` object parameters that don't vary ------------------
 usame               <- list()
-usame$input$ploidy  <- ploidy
-usame$input$model   <- "hw"
+usame$ploidy  <- ploidy
+usame$model   <- "hw"
 usame$seq_error     <- seq_error
-usame$out_prop      <- out_prop
-usame$p1geno        <- -1
-usame$p2geno        <- -1
-usame$out_mean      <- 1/2
-usame$out_disp      <- 1/3
-class(usame)        <- "updog"
 
 
 ## Run Simulations ------------------------------------------------
-parvals <- expand.grid(allele_freq = seq(0.05, 0.95, length = itermax), bias_val = bias_seq, od_param = od_seq)
+parvals <- expand.grid(allele_freq = seq(0.05, 0.95, length = itermax), bias = bias_seq, od = od_seq)
 parvals$seed <- 1:nrow(parvals)
-parvals$osize <- sapply(size_mat[, 1:itermax], function(x) x[!is.na(x)])
+parvals$sizevec <- sapply(size_mat[, 1:itermax], function(x) x[!is.na(x)])
+
+set.seed(1) ## reorder to evenly distribution cluster computation
+parvals_order <- sample(1:nrow(parvals))
+parvals <- parvals[parvals_order, ]
 
 par_list <- list()
 for (list_index in 1:nrow(parvals)) {
@@ -136,10 +163,10 @@ for (list_index in 1:nrow(parvals)) {
 }
 
 for (list_index in 1:nrow(parvals)) {
-  par_list[[list_index]]$input$osize <- parvals$osize[[list_index]]
+  par_list[[list_index]]$sizevec <- parvals$sizevec[[list_index]]
 }
 
-cl <- parallel::makeCluster(parallel::detectCores() - 2)
+cl <- parallel::makeCluster(parallel::detectCores() - 1)
 simout <- t(parallel::parSapply(cl = cl, X = par_list, FUN = one_rep, usame = usame))
 parallel::stopCluster(cl)
 
@@ -152,6 +179,3 @@ parallel::stopCluster(cl)
 # }
 
 write.csv(simout, "./Output/sims_out/sims_out.csv", row.names = FALSE)
-
-
-

@@ -4,7 +4,7 @@ ufiles <- list.files("./Output/updog_fits/")
 seq_vec <- matrix(NA, nrow = length(ufiles), ncol = 1)
 for (index in 1:length(ufiles)) {
   uout <- readRDS(file = paste0("./Output/updog_fits/", ufiles[index]))
-  seq_vec[index, 1] <- uout$seq_error
+  seq_vec[index, 1] <- uout$seq
 }
 write.table(x = seq_vec, file = "./Output/blischak_formatted_data/seq_error.txt", row.names = FALSE, col.names = FALSE)
 
