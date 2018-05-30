@@ -1,3 +1,13 @@
+# R scripting front-end. Note that makeCluster sometimes fails to
+# connect to a socker when using Rscript, so we are using the "R CMD
+# BATCH" interface instead.
+rexec = R CMD BATCH --no-save --no-restore
+
+# AVOID EDITING ANYTHING BELOW THIS LINE
+# --------------------------------------
+
+# These variables contain csv files for readcounts from the
+# Shirasawa dataset.
 shirasawa_snps = ./Output/shirasawa_snps/example_refcounts.csv \
 		 ./Output/shirasawa_snps/example_readcounts.csv
 
@@ -22,6 +32,7 @@ supermassa_fits = ./Output/supermassa_formatted_data/supermassa_out1.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out2.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out3.txt
 
+# Figures output from plot_run_sims.R
 sim_plots = ./Output/fig/allele_freq_est.pdf \
       ./Output/fig/diff.pdf \
       ./Output/fig/param_ests.pdf \
@@ -31,6 +42,10 @@ sim_plots = ./Output/fig/allele_freq_est.pdf \
       ./Output/fig/corr.pdf \
       ./Output/fig/od_v_bias.pdf \
       ./Output/fig/seq_v_af.pdf
+
+# Figures output from plot_run_pp_sims.R
+pp_sim_plots = ./Output/fig/est_weight_pp.pdf \
+      ./Output/fig/prop_correct_pp.pdf
 
 all : sweet_potato simulations
 
@@ -54,6 +69,7 @@ sweet_potato : $(od_output) \
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
 	      $(sim_plots) \
+	      $(pp_sim_plots) \
 	      ./Output/hwe_f1_sims/hwe_f1_sims_out.csv \
 	      ./Output/fig/hwe_s1_prop_correct.pdf \
 	      ./Output/sims_out/sims_out_pp.csv
@@ -65,109 +81,114 @@ $(shirasawa_snps) : ./Data/KDRIsweetpotatoXushu18S1LG2017.vcf.gz ./Analysis/pars
 	Rscript ./Analysis/parse_vcf.R
 
 # Fit updog on the top 1000 covered SNPs.
-$(ufits) : $(shirasawa_snps) ./Analysis/fit_all_updog.R
+$(ufits) : ./Analysis/fit_all_updog.R $(shirasawa_snps) 
 	mkdir -p ./Output/updog_fits
-	Rscript ./Analysis/fit_all_updog.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Argument for overdispersion.
-$(od_output) : $(shirasawa_snps) ./Analysis/od_argument.R
+$(od_output) : ./Analysis/od_argument.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
 	mkdir -p ./Output/text
-	Rscript ./Analysis/od_argument.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Argument for bias.
-$(bias_output) : $(shirasawa_snps) ./Analysis/bias_arg.R
+$(bias_output) : ./Analysis/bias_arg.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
 	mkdir -p ./Output/text
-	Rscript ./Analysis/bias_arg.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Argument for outliers
-./Output/text/out_prob.txt : $(ufits) ./Analysis/out_arg.R
+./Output/text/out_prob.txt : ./Analysis/out_arg.R $(ufits) 
 	mkdir -p ./Output/text
-	Rscript ./Analysis/out_arg.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Prior quantiles for bias and sequencing error rates
-./Output/fig/prior_quantiles.pdf : $(shirasawa_snps) ./Analysis/plot_quantiles.R
+./Output/fig/prior_quantiles.pdf : ./Analysis/plot_quantiles.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_quantiles.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Raw plots of the three SNP's I picked out
-./Output/fig/snp_examples.pdf : $(shirasawa_snps) ./Analysis/plot_raw.R
+./Output/fig/snp_examples.pdf : ./Analysis/plot_raw.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_raw.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Argument for sequencing error rate
-./Output/fig/seq_error_example.pdf : $(shirasawa_snps) ./Analysis/seq_arg.R
+./Output/fig/seq_error_example.pdf : ./Analysis/seq_arg.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/seq_arg.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Showing the different combinations of sequencing error rate and bias
-./Output/fig/prob_plots.pdf : $(shirasawa_snps) ./Analysis/possible_probs.R
+./Output/fig/prob_plots.pdf : ./Analysis/possible_probs.R $(shirasawa_snps) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/possible_probs.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot the updog fits of the three SNP's I picked out
-./Output/fig/updog_fits.pdf : $(ufits) ./Analysis/plot_updog_fits.R
+./Output/fig/updog_fits.pdf : ./Analysis/plot_updog_fits.R $(ufits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_updog_fits.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot computation time of all 1000 updog fits
-./Output/fig/comp_time.pdf : $(ufits) ./Analysis/computation.R
+./Output/fig/comp_time.pdf : ./Analysis/computation.R $(ufits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/computation.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Run ebg on the data using sequencing error rates estimated from updog
-$(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
+$(blischak_fits) : ./Analysis/fit_blischak.R $(ufits) $(shirasawa_snps) 
 	mkdir -p ./Output/blischak_formatted_data
-	Rscript ./Analysis/fit_blischak.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # plot blischak output
-./Output/fig/blischak_fits.pdf : $(blischak_fits) ./Analysis/plot_blischak.R
+./Output/fig/blischak_fits.pdf : ./Analysis/plot_blischak.R $(blischak_fits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_blischak.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Hypothetical data with identifiability issue
-./Output/fig/ident_prob.pdf : $(ufits) ./Analysis/hypothetical_problem.R
+./Output/fig/ident_prob.pdf : ./Analysis/hypothetical_problem.R $(ufits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/hypothetical_problem.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot SuperMASSA fits from http://statgen.esalq.usp.br/SuperMASSA/
-./Output/fig/supermassa_fits.pdf : $(supermassa_fits) ./Analysis/plot_supermassa.R
+./Output/fig/supermassa_fits.pdf : ./Analysis/plot_supermassa.R $(supermassa_fits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_supermassa.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot Supermassa, updog, and Blischak on the SNPs I chose
-./Output/fig/real_data_plots.pdf : $(blischak_fits) $(ufits) $(supermassa_fits) ./Analysis/plot_combined.R
+./Output/fig/real_data_plots.pdf : ./Analysis/plot_combined.R $(blischak_fits) $(ufits) $(supermassa_fits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_combined.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Run Simulations where simulate and fit under HWE.
-./Output/sims_out/sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_sims.R
+./Output/sims_out/sims_out.csv : ./Analysis/run_sims.R $(shirasawa_snps)
 	mkdir -p ./Output/sims_out
 	mkdir -p ./Output/blischak_formatted_data_sims/
-	Rscript ./Analysis/run_sims.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Run Simulations where simulate under preferential pairing
-./Output/sims_out/sims_out_pp.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_pp_sims.R
-  mkdir -p ./Output/sims_out
-  Rscript ./Analysis/run_pp_sims.R
+./Output/sims_out/sims_out_pp.csv : ./Analysis/run_pp_sims.R $(shirasawa_snps)
+	mkdir -p ./Output/sims_out
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot simulations where simulate and fit under HWE
-$(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_run_sims.R
+$(sim_plots) : ./Analysis/plot_run_sims.R ./Output/sims_out/sims_out.csv 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_run_sims.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
+
+# Plot simulations where simulate under preferential pairing
+$(pp_sim_plots) : ./Analysis/plot_run_pp_sims.R ./Output/sims_out/sims_out_pp.csv 
+	mkdir -p ./Output/fig
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Run Simulations where simulate under S1 and fit under both S1 and HWE
-./Output/hwe_f1_sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/hwe_f1_sims.R
+./Output/hwe_f1_sims_out.csv : ./Analysis/hwe_f1_sims.R $(shirasawa_snps)
 	mkdir -p ./Output/hwe_f1_sims
-	Rscript ./Analysis/hwe_f1_sims.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Plot Simulations where simulate under S1 and fit under both S1 and HWE
-./Output/fig/hwe_s1_prop_correct.pdf : ./Output/hwe_f1_sims/hwe_f1_sims_out.csv ./Analysis/hwe_f1_plots.R
+./Output/fig/hwe_s1_prop_correct.pdf : ./Analysis/hwe_f1_plots.R ./Output/hwe_f1_sims/hwe_f1_sims_out.csv 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/hwe_f1_plots.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
 
 # Histograms of updog estimates on Shirasawa data
-./Output/fig/ufit_features.pdf : $(ufits) ./Analysis/shirasawa_data_features.R
+./Output/fig/ufit_features.pdf : ./Analysis/shirasawa_data_features.R $(ufits) 
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/shirasawa_data_features.R
+	$(rexec) $< Output/$(basename $(notdir $<)).Rout
