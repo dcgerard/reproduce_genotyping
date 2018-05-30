@@ -1,8 +1,8 @@
 library(updog)
 suppressMessages(library(tidyverse))
 numfiles <- length(list.files("./Output/updog_fits/"))
-parmat <- matrix(NA, nrow = numfiles, ncol = 5)
-colnames(parmat) <- c("bias", "seq", "od", "pgeno", "out_prop")
+parmat <- matrix(NA, nrow = numfiles, ncol = 6)
+colnames(parmat) <- c("bias", "seq", "od", "pgeno", "out_prop", "med_depth")
 for (index in 1:numfiles) {
   uout <- readRDS(paste0("./Output/updog_fits/uout", index, ".RDS"))
   parmat[index, 1] <- uout$bias
@@ -10,6 +10,7 @@ for (index in 1:numfiles) {
   parmat[index, 3] <- uout$od
   parmat[index, 4] <- uout$par$pgeno
   parmat[index, 5] <- uout$out_prop
+  parmat[index, 6] <- median(uout$input$sizevec)
 }
 pardat <- as_data_frame(parmat)
 saveRDS(object = pardat, file = "./Output/shirasawa_snps/shir_features.RDS")

@@ -23,12 +23,14 @@ supermassa_fits = ./Output/supermassa_formatted_data/supermassa_out1.txt \
 		  ./Output/supermassa_formatted_data/supermassa_out3.txt
 
 sim_plots = ./Output/fig/allele_freq_est.pdf \
-	    ./Output/fig/bias_v_af.pdf \
-            ./Output/fig/od_v_af.pdf \
-            ./Output/fig/od_v_bias.pdf \
-            ./Output/fig/param_ests.pdf \
-            ./Output/fig/prop_correct_lines.pdf \
-            ./Output/fig/seq_v_af.pdf
+      ./Output/fig/diff.pdf \
+      ./Output/fig/param_ests.pdf \
+      ./Output/fig/bias_v_af.pdf \
+      ./Output/fig/od_v_af.pdf \
+      ./Output/fig/prop_correct.pdf \
+      ./Output/fig/corr.pdf \
+      ./Output/fig/od_v_bias.pdf \
+      ./Output/fig/seq_v_af.pdf
 
 all : sweet_potato simulations
 
@@ -53,7 +55,8 @@ sweet_potato : $(od_output) \
 simulations : ./Output/sims_out/sims_out.csv \
 	      $(sim_plots) \
 	      ./Output/hwe_f1_sims/hwe_f1_sims_out.csv \
-	      ./Output/fig/hwe_s1_prop_correct.pdf
+	      ./Output/fig/hwe_s1_prop_correct.pdf \
+	      ./Output/sims_out/sims_out_pp.csv
 
 
 # Extract the reference and alternative counts from the shirasawa et al data.
@@ -144,10 +147,15 @@ $(blischak_fits) : $(ufits) $(shirasawa_snps) ./Analysis/fit_blischak.R
 	mkdir -p ./Output/blischak_formatted_data_sims/
 	Rscript ./Analysis/run_sims.R
 
+# Run Simulations where simulate under preferential pairing
+./Output/sims_out/sims_out_pp.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/run_pp_sims.R
+  mkdir -p ./Output/sims_out
+  Rscript ./Analysis/run_pp_sims.R
+
 # Plot simulations where simulate and fit under HWE
-$(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_sims.R
+$(sim_plots) : ./Output/sims_out/sims_out.csv ./Analysis/plot_run_sims.R
 	mkdir -p ./Output/fig
-	Rscript ./Analysis/plot_sims.R
+	Rscript ./Analysis/plot_run_sims.R
 
 # Run Simulations where simulate under S1 and fit under both S1 and HWE
 ./Output/hwe_f1_sims_out.csv : ./Output/shirasawa_snps/example_readcounts.csv ./Analysis/hwe_f1_sims.R

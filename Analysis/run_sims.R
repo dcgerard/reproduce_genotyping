@@ -73,9 +73,24 @@ one_rep <- function(unew, usame) {
   fp_out <- fitPoly::fitOneMarker(ploidy = usim$ploidy,
                                   marker = "SNP",
                                   data = fitpoly_df)
+  
+  ## Run GATK method using updog
+  suppressWarnings({
+  gatk_out <- updog::flexdog(refvec      = refvec, 
+                             sizevec     = sizevec, 
+                             ploidy      = usim$ploidy, 
+                             bias_init   = 1,
+                             od          = 0,
+                             seq         = usim$seq_error,
+                             update_bias = FALSE,
+                             update_od   = FALSE,
+                             update_seq  = FALSE,
+                             model       = "uniform", 
+                             verbose     = FALSE)
+  })
 
   ## Summary Quantities
-  parout     <- rep(NA, length = 25)
+  parout     <- rep(NA, length = 30)
   parout[1]  <- mean(bgeno == true_geno, na.rm = TRUE)
   parout[2]  <- mean(uout$geno == true_geno, na.rm = TRUE)
   parout[3]  <- sum((bgeno - true_geno) ^ 2, na.rm = TRUE) / sum(!is.na(true_geno) & !is.na(bgeno))
@@ -115,13 +130,42 @@ one_rep <- function(unew, usame) {
   parout[23] <- stats::cor(x = bgeno, y = true_geno, use = "complete.obs")
   parout[24] <- stats::cor(x = refvec / sizevec, y = true_geno, use = "complete.obs")
   parout[25] <- unew$seed
-  names(parout) <- c("bham", "uham", "bmse", "umse",
-                     "umean_mse", "allele_freq", "uallele_freq",
-                     "ballele_freq", "od_param", "uod_param", "bias_val",
-                     "ubias_val", "seq_error", "useq_error",
-                     "fpham", "fpmse", "fpepm", "fpcor", "fpcor_pm",
-                     "uepm", "ucor", "ucor_pm", "bcor", "naive_cor",
-                     "seed")
+  parout[26] <- mean(gatk_out$geno == true_geno, na.rm = TRUE)
+  parout[27] <- sum((gatk_out$geno - true_geno) ^ 2, na.rm = TRUE) / sum(!is.na(true_geno) & !is.na(gatk_out$geno))
+  parout[28] <- stats::cor(x = gatk_out$geno, y = true_geno, use = "complete.obs")
+  parout[29] <- stats::cor(x = gatk_out$postmean, y = true_geno, use = "complete.obs")
+  parout[30] <- gatk_out$prop_mis
+  
+  names(parout) <- c("bham",
+                     "uham", 
+                     "bmse", 
+                     "umse",
+                     "umean_mse",
+                     "allele_freq", 
+                     "uallele_freq",
+                     "ballele_freq", 
+                     "od_param", 
+                     "uod_param", 
+                     "bias_val",
+                     "ubias_val", 
+                     "seq_error", 
+                     "useq_error",
+                     "fpham", 
+                     "fpmse", 
+                     "fpepm",
+                     "fpcor", 
+                     "fpcor_pm",
+                     "uepm", 
+                     "ucor",
+                     "ucor_pm",
+                     "bcor",
+                     "naive_cor",
+                     "seed",
+                     "gham",
+                     "gmse",
+                     "gcor",
+                     "gcor_pm",
+                     "gepm")
   return(parout)
 }
 
