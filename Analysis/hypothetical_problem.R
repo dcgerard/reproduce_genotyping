@@ -1,7 +1,7 @@
 ## Hypothetical problem.
 
-set.seed(2)
-library(updog)
+
+suppressMessages(library(updog))
 suppressMessages(library(tidyverse))
 library(ggthemes)
 uout <- readRDS("./Output/updog_fits/uout1.RDS")
@@ -17,42 +17,50 @@ od        <- 0.01
 model     <- "f1"
 ploidy    <- 4
 
-geno_vec <- rgeno(n      = nind, 
-                  ploidy = ploidy, 
-                  model  = model, 
+set.seed(1)
+geno_vec <- rgeno(n      = nind,
+                  ploidy = ploidy,
+                  model  = model,
                   p1geno = p1geno,
                   p2geno = p2geno)
 
-refvec <- rflexdog(sizevec = sizevec, 
-                   geno    = geno_vec, 
-                   ploidy  = ploidy, 
+refvec <- rflexdog(sizevec = sizevec,
+                   geno    = geno_vec,
+                   ploidy  = ploidy,
                    seq     = seq_error,
-                   bias    = bias, 
+                   bias    = bias,
                    od      = od)
 
 maxcount <- max(c(refvec, sizevec - refvec))
 
+## start at more bias values to make sure
+## reach maximum likelihood in this weird situation
+unew1 <- flexdog(refvec    = refvec,
+                 sizevec   = sizevec,
+                 ploidy    = ploidy,
+                 model     = "f1",
+                 var_seq   = Inf,
+                 var_bias  = Inf,
+                 bias_init = exp(c(-2, -1, -0.5, 0, 0.5, 1, 2)),
+                 verbose   = FALSE)
 
-unew1 <- flexdog(refvec   = refvec, 
-                 sizevec  = sizevec, 
-                 ploidy   = ploidy,
-                 model    = "f1", 
-                 var_seq  = Inf, 
-                 var_bias = Inf,
-                 verbose  = FALSE)
+unew2 <- flexdog(refvec    = refvec,
+                 sizevec   = sizevec,
+                 ploidy    = ploidy,
+                 model     = "f1",
+                 var_bias  = Inf,
+                 bias_init = exp(c(-2, -1, -0.5, 0, 0.5, 1, 2)),
+                 verbose   = FALSE)
 
-unew2 <- flexdog(refvec   = refvec, 
-                 sizevec  = sizevec, 
-                 ploidy   = ploidy,
-                 model    = "f1", 
-                 var_bias = Inf,
-                 verbose  = FALSE)
 
-unew3 <- flexdog(refvec   = refvec, 
-                 sizevec  = sizevec, 
-                 ploidy   = ploidy,
-                 model    = "f1",
-                 verbose  = FALSE)
+unew3 <- flexdog(refvec    = refvec,
+                 sizevec   = sizevec,
+                 ploidy    = ploidy,
+                 model     = "f1",
+                 var_seq   = 0.1,
+                 bias_init = exp(c(-2, -1, -0.5, 0, 0.5, 1, 2)),
+                 verbose   = FALSE)
+
 
 ## No labeling -----------------------------------------------------------------------
 dfdat <- data_frame(A = refvec, a = sizevec - refvec)
