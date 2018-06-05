@@ -90,6 +90,10 @@ oracle_figs = $(oracle_dir)/cor_n_for_05_alpha50_ploidy2.pdf \
 	$(oracle_dir)/n_for_05_alpha95_ploidy4.pdf \
 	$(oracle_dir)/n_for_05_alpha95_ploidy6.pdf
 
+# Figures demonstrating differences between updog and fitPoly on the Shirasawa data.
+fpnafigs = ./Output/fig/ufit_weird.pdf \
+           ./Output/fig/prop_mis_shir.pdf
+
 all : sweet_potato simulations
 
 .PHONY : sweet_potato
@@ -107,7 +111,8 @@ sweet_potato : $(od_output) \
       ./Output/fig/real_data_plots.pdf \
       ./Output/fig/ufit_features.pdf \
       ./Output/fig/seq_error_example.pdf \
-      ./Output/fig/comp_time.pdf
+      ./Output/fig/comp_time.pdf \
+      $(fpnafigs)
 
 .PHONY : simulations
 simulations : ./Output/sims_out/sims_out.csv \
@@ -276,6 +281,12 @@ $(pp_sim_plots) : ./Analysis/plot_run_pp_sims.R ./Output/sims_out/sims_out_pp.cs
 $(oracle_figs) : ./Analysis/plot_oracle.R ./Output/oracle/odat.RDS
 	mkdir -p ./Output/oracle
 	mkdir -p ./Output/oracle/fig
+	mkdir -p ./Output/rout
+	$(rexec) $< Output/rout/$(basename $(notdir $<)).Rout
+
+# Plots demonstrating differences between fitPoly and updog on the Shirasawa data
+$(fpnafigs) : ./Analysis/fit_poly_na.R $(ufits) $(fpfits)
+	mkdir -p ./Output/fig
 	mkdir -p ./Output/rout
 	$(rexec) $< Output/rout/$(basename $(notdir $<)).Rout
 
