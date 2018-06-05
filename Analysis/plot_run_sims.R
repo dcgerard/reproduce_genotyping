@@ -27,7 +27,7 @@ pl <- ggplot(data = subdat,
   ylab("Proportion Correct")
 
 pdf(file = "./Output/fig/prop_correct.pdf",
-    width = 6.5, height = 8,
+    width = 6.5, height = 7.5,
     family = "Times")
 print(pl)
 dev.off()
@@ -58,7 +58,7 @@ pl <- ggplot(data = subdat,
   ylab("Correlation")
 
 pdf(file = "./Output/fig/corr.pdf",
-    width = 6.5, height = 8,
+    width = 6.5, height = 7.5,
     family = "Times")
 print(pl)
 dev.off()
@@ -102,7 +102,7 @@ pl <- ggplot(data = pcdat,
 
 
 pdf(file = "./Output/fig/diff.pdf",
-    width = 6.5, height = 8,
+    width = 6.5, height = 7.5,
     family = "Times")
 print(pl)
 dev.off()
@@ -172,7 +172,7 @@ pl <- ggplot(data = longdat,
 pdf(file = "./Output/fig/od_v_af.pdf",
     family = "Times",
     colormodel = "cmyk",
-    height = 8, width = 6.5)
+    height = 7.5, width = 6.5)
 print(pl)
 dev.off()
 
@@ -223,7 +223,7 @@ pl <- ggplot(data = longdat,
 pdf(file = "./Output/fig/bias_v_af.pdf",
     family = "Times",
     colormodel = "cmyk",
-    height = 8,
+    height = 7.5,
     width = 6.5)
 print(pl)
 dev.off()
@@ -255,7 +255,7 @@ pl <- ggplot(data = longdat,
 pdf(file = "./Output/fig/seq_v_af.pdf",
     family = "Times",
     colormodel = "cmyk",
-    height = 8,
+    height = 7.5,
     width = 6.5)
 print(pl)
 dev.off()

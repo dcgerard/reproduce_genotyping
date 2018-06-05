@@ -21,7 +21,7 @@ smalldat %>%
   pl
 
 pdf(file = "./Output/fig/est_weight_pp.pdf",
-    width = 6.5, height = 8,
+    width = 6.5, height = 7.5,
     family = "Times")
 print(pl)
 dev.off()
@@ -48,7 +48,7 @@ pl <- ggplot(data = subdat,
   ylab("Proportion Correct")
 
 pdf(file = "./Output/fig/prop_correct_pp.pdf",
-    width = 6.5, height = 8,
+    width = 6.5, height = 7.5,
     family = "Times")
 print(pl)
 dev.off()
