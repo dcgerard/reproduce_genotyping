@@ -1,5 +1,5 @@
 ## Combine plots from updog, blischak, and supermassa
-library(updog)
+suppressMessages(library(updog))
 suppressMessages(library(tidyverse))
 ploidy <- 6
 
@@ -91,7 +91,7 @@ colnames(summaries_mat) <- c("A", "a", "seq_error", "bias_val",
                              "od_param", "out_prop", "ogeno", "prob_ok", "snp")
 for (index in 1:3) {
   uout <- readRDS(paste0("./Output/updog_fits/uout", index, ".RDS"))
-  dfdat <- data.frame(A       = uout$input$refvec, 
+  dfdat <- data.frame(A       = uout$input$refvec,
                       a       = uout$input$sizevec- uout$input$refvec,
                       geno    = uout$geno,
                       prob_ok = 1 - uout$prob_outlier)
@@ -104,13 +104,13 @@ for (index in 1:3) {
   df_lines <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
   df_lines$snp <- paste0("SNP", index)
 
-  summaries_mat[index, ] <- c(uout$input$p1ref, 
+  summaries_mat[index, ] <- c(uout$input$p1ref,
                               uout$input$p1size - uout$input$p1ref,
-                              uout$seq, 
+                              uout$seq,
                               uout$bias,
-                              uout$od, 
-                              uout$out_prop, 
-                              uout$par$pgeno, 
+                              uout$od,
+                              uout$out_prop,
+                              uout$par$pgeno,
                               1,
                               index)
 
@@ -127,13 +127,45 @@ dfdat_tot$Method <- "updog"
 df_lines_tot$Method <- "updog"
 snp_combo <- bind_rows(snp_combo, select(dfdat_tot, A, a, geno, snp, Method, prob_ok))
 dflines_combo <- bind_rows(dflines_combo, df_lines_tot)
+
+
+## Finally, add fitPoly --------------------------------------------------
+for (index in 1:3) {
+  fpout <- readRDS(paste0("./Output/fp_fits/fpout", index, ".RDS"))
+  dfdat <- data.frame(A       = counts_mat[, index],
+                      a       = size_mat[, index] - counts_mat[, index],
+                      geno    = fpout$scores$maxgeno,
+                      prob_ok = 1)
+  dfdat$snp <- paste0("SNP", index)
+
+  pk <- unlist(c(select(fpout$modeldata, mu0:mu6)))
+  slopevec <- pk/(1 - pk)
+  xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
+  yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
+  df_lines <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
+  df_lines$snp <- paste0("SNP", index)
+
+  if(index == 1) {
+    dfdat_tot <- dfdat
+    df_lines_tot <- df_lines
+  } else {
+    dfdat_tot <- bind_rows(dfdat_tot, dfdat)
+    df_lines_tot <- bind_rows(df_lines_tot, df_lines)
+  }
+}
+
+dfdat_tot$Method <- "fitPoly"
+df_lines_tot$Method <- "fitPoly"
+snp_combo <- bind_rows(snp_combo, select(dfdat_tot, A, a, geno, snp, Method, prob_ok))
+dflines_combo <- bind_rows(dflines_combo, df_lines_tot)
 snp_combo$geno <- factor(snp_combo$geno, levels = 0:ploidy)
 
-
+## Now plot all of them together --------------------------------------------------------------
+snp_combo$geno <- factor(snp_combo$geno, levels = 0:ploidy)
 possible_colors <- ggthemes::colorblind_pal()(5)[c(5, 3:1)]
 
 pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha = prob_ok)) +
-  facet_grid(snp ~ Method) +
+  facet_grid(Method ~ snp) +
   geom_point(size = 0.3) +
   xlim(0, maxcount) +
   ylim(0, maxcount) +
@@ -149,7 +181,7 @@ pl <- ggplot(data = snp_combo, mapping = aes(x = a, y = A, color = geno, alpha =
          alpha = guide_legend(override.aes = list(size=1.5)))
 
 pdf(file = "./Output/fig/real_data_plots.pdf", colormodel = "cmyk", family = "Times",
-    height = 5.5, width = 6.5)
+    height = 7.5, width = 6.5)
 print(pl)
 dev.off()
 

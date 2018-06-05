@@ -1,6 +1,6 @@
 ## Plot three SNP's
 
-library(updog)
+suppressMessages(library(updog))
 suppressMessages(library(tidyverse))
 counts_mat <- read.csv("./Output/shirasawa_snps/example_refcounts.csv", row.names = 1)[, 1:3]
 size_mat   <- read.csv("./Output/shirasawa_snps/example_readcounts.csv", row.names = 1)[, 1:3]

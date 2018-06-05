@@ -7,7 +7,7 @@ ploidy_seq <- c(2, 4, 6)
 seq        <- 0.001
 bias_seq   <- seq(0.5, 1, length = 11)
 od_seq     <- seq(0, 0.02, length = 11)
-nseq       <- seq_len(1000)
+nseq       <- seq_len(3000)
 alpha_seq  <- c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95)
 as.data.frame(expand.grid(n      = nseq,
                           ploidy = ploidy_seq,

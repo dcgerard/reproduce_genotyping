@@ -16,4 +16,14 @@ pdf(file = "./Output/fig/comp_time.pdf", family = "Times", colormodel = "cmyk", 
 print(pl)
 dev.off()
 
-cat(paste0("95% Interval of Computation Time: (", paste(round(quantile(time_vec, probs = c(0.025, 0.975)), digits = 2), collapse = ", "), ")"), file = "./Output/text/computation_95.txt")
+fptimevec <- rep(NA, length = nsnps)
+for (index in 1:nsnps) {
+  fpout <- readRDS(paste0("./Output/fp_fits/fpout", index, ".RDS"))
+  if (any(!is.na(fpout$scores))) {
+    fptimevec[index] <- fpout$time[3]
+  }
+}
+
+cat(paste0("updog 95% Interval of Computation Time: (", paste(round(quantile(time_vec, probs = c(0.025, 0.975)), digits = 2), collapse = ", "), ")\n\n"),
+    paste0("fitPoly 95% Interval of Computation Time: (", paste(round(quantile(fptimevec, probs = c(0.025, 0.975), na.rm = TRUE), digits = 2), collapse = ", "), ")"),
+    file = "./Output/text/computation_95.txt")

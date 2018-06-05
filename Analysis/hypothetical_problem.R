@@ -88,21 +88,21 @@ df_lines_temp$type <- "B"
 df_lines <- bind_rows(df_lines, df_lines_temp)
 
 ## Penalty only on sequencing error rate ---------------------------------------------
-dftemp <- data_frame(A = unew2$input$refvec, a = unew2$input$sizevec - unew2$input$refvec, geno = unew2$geno)
-dftemp$type <- "C"
-dfdat <- bind_rows(dfdat, dftemp)
-
-pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew2$bias, eps = unew2$seq)
-slopevec <- pk/(1 - pk)
-xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
-yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
-df_lines_temp <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
-df_lines_temp$type <- "C"
-df_lines <- bind_rows(df_lines, df_lines_temp)
+# dftemp <- data_frame(A = unew2$input$refvec, a = unew2$input$sizevec - unew2$input$refvec, geno = unew2$geno)
+# dftemp$type <- "E"
+# dfdat <- bind_rows(dfdat, dftemp)
+#
+# pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew2$bias, eps = unew2$seq)
+# slopevec <- pk/(1 - pk)
+# xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
+# yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
+# df_lines_temp <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
+# df_lines_temp$type <- "E"
+# df_lines <- bind_rows(df_lines, df_lines_temp)
 
 ## Penalty on both bias and sequencing error rate -----------------------------------
 dftemp <- data_frame(A = unew3$input$refvec, a = unew3$input$sizevec - unew3$input$refvec, geno = unew3$geno)
-dftemp$type <- "D"
+dftemp$type <- "C"
 dfdat <- bind_rows(dfdat, dftemp)
 
 pk <- updog:::xi_fun(p = (0:ploidy) / ploidy, h = unew3$bias, eps = unew3$seq)
@@ -110,27 +110,30 @@ slopevec <- pk/(1 - pk)
 xend <- pmin(rep(maxcount, ploidy + 1), maxcount/slopevec)
 yend <- pmin(rep(maxcount, ploidy + 1), maxcount * slopevec)
 df_lines_temp <- data_frame(x = rep(0, ploidy + 1), y = rep(0, ploidy + 1), xend = xend, yend = yend)
-df_lines_temp$type <- "D"
+df_lines_temp$type <- "C"
 df_lines <- bind_rows(df_lines, df_lines_temp)
 
 ## Plot Results ----------------------------------------------------------------------
 dfdat$geno <- factor(dfdat$geno, levels = 0:4)
 
-pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A, col = geno)) +
-  facet_wrap(~ type) +
+dfdat %>%
+ggplot(mapping = aes(x = a, y = A, col = geno)) +
+  facet_grid(. ~ type) +
   geom_point(size = 0.2) +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white")) +
   xlab("Counts a") +
   ylab("Counts A") +
-  guides(color = guide_legend(title = "Genotype")) +
   scale_color_hue(drop = FALSE) +
+  # ggthemes::scale_color_colorblind(drop = FALSE) +
   geom_segment(data = df_lines, mapping = aes(x = x, y = y, xend = xend, yend = yend),
                lty = 2, alpha = 1 / 2, color = "black", size = 0.5) +
-  guides(colour = guide_legend(override.aes = list(size=1.5)))
+  guides(colour = guide_legend(override.aes = list(size=1.5),
+                               title = "Genotype")) ->
+  pl
 
 pdf(file = "./Output/fig/ident_prob.pdf", family = "Times", colormodel = "cmyk",
-    width = 4, height = 3)
+    width = 6, height = 2.4)
 print(pl)
 dev.off()
 
