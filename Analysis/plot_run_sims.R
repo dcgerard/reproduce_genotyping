@@ -205,7 +205,7 @@ pl_od <- ggplot(data = longdat,
   ylab(expression(hat(tau))) +
   geom_hline(yintercept = 0, lty = 2, alpha = 1 / 2, color = "red") +
   geom_hline(yintercept = 0.01, lty = 2, alpha = 1 / 2, color = "red") +
-  geom_hline(yintercept = 0.05, lty = 2, alpha = 1 / 2, color = "red")
+  geom_hline(yintercept = 0.02, lty = 2, alpha = 1 / 2, color = "red")
 
 
 
