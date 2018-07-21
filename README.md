@@ -6,7 +6,7 @@ Reproducing Results of Gerard et al. (2018)
 Introduction
 ============
 
-This repository contains code to reproduce the empirical evaluations of Gerard et al. (2018). The new methods can be found in the [updog](https://github.com/dcgerard/updog) package.
+This repository contains code to reproduce the empirical evaluations of Gerard et al. (2018). The new methods can be found in the [updog](https://cran.r-project.org/package=updog) package on CRAN.
 
 If you are having trouble reproducing these results, it might be that you need to update some of your R packages. These are the versions that I used:
 
@@ -35,10 +35,10 @@ sessionInfo()
     ## [8] base     
     ## 
     ## other attached packages:
-    ##  [1] updogAlpha_1.0.1 gridExtra_2.3    ggthemes_4.0.0   updog_1.0.0     
-    ##  [5] forcats_0.3.0    stringr_1.3.1    dplyr_0.7.4      purrr_0.2.5     
-    ##  [9] readr_1.1.1      tidyr_0.8.0      tibble_1.4.2     ggplot2_3.0.0   
-    ## [13] tidyverse_1.2.1 
+    ##  [1] fitPoly_3.0.0    updogAlpha_1.0.1 gridExtra_2.3    ggthemes_4.0.0  
+    ##  [5] rmutil_1.1.1     updog_1.0.1      forcats_0.3.0    stringr_1.3.1   
+    ##  [9] dplyr_0.7.4      purrr_0.2.5      readr_1.1.1      tidyr_0.8.0     
+    ## [13] tibble_1.4.2     ggplot2_3.0.0    tidyverse_1.2.1 
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] reshape2_1.4.3            haven_1.1.1              
@@ -84,10 +84,16 @@ Install Packages
 To install the needed R packages, run the following in R
 
 ``` r
-install.packages(c("tidyverse", "rmutil", "snow", "parallel", 
-                   "ggthemes", "gridExtra", "devtools"))
-devtools::install_github("dcgerard/updog")
+install.packages(c("updog", "tidyverse", "rmutil", "snow", "parallel", 
+                   "ggthemes", "gridExtra", "devtools", "fitPoly"))
 devtools::install_github("dcgerard/updogAlpha")
+```
+
+If the most recent CRAN version of `updog` doesn't seem to work, you can retry with the version that I last used to reproduce these results:
+
+``` r
+devtools::install_github("dcgerard/updog", 
+                         ref = "76c72eb717e18061576fc20b3c07f9da71b67263")
 ```
 
 Please follow the directions [here](https://github.com/pblischak/polyploid-genotyping/tree/master/ebg) to install `ebg`.
@@ -117,6 +123,9 @@ Get Coffee
 
 The simulations should take a few hours. You should get some coffee. Here is a list of some of my favorite places:
 
+-   Washington, D.C.
+    -   [Politics and Prose](https://www.yelp.com/biz/politics-and-prose-washington)
+    -   [Colony Club](https://www.yelp.com/biz/colony-club-washington)
 -   Chicago
     -   [Sawada Coffee](https://www.yelp.com/biz/sawada-coffee-chicago)
     -   [Plein Air Cafe](https://www.yelp.com/biz/plein-air-cafe-and-eatery-chicago-2)
@@ -125,6 +134,7 @@ The simulations should take a few hours. You should get some coffee. Here is a l
     -   [Cafe Solstice](https://www.yelp.com/biz/cafe-solstice-seattle)
 -   Columbus
     -   [Yeah, Me Too](https://www.yelp.com/biz/yeah-me-too-columbus)
+    -   [Fox in the Snow](https://www.yelp.com/biz/fox-in-the-snow-cafe-columbus-2)
     -   [Stauf's Coffee Roasters](https://www.yelp.com/biz/staufs-coffee-roasters-columbus-2)
     -   [Caffe Apropos](https://www.yelp.com/biz/caff%C3%A9-apropos-columbus-2)
 

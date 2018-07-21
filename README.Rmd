@@ -9,10 +9,10 @@ output: github_document
 
 This repository contains code to reproduce the empirical evaluations
 of @gerard2018harnessing. The new methods can be found in the
-[updog](https://github.com/dcgerard/updog) package.
+[updog](https://cran.r-project.org/package=updog) package on CRAN.
 
 ```{r, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra", "updogAlpha")
+liblist <- list("tidyverse", "updog", "rmutil", "parallel", "parallel", "ggthemes", "gridExtra", "updogAlpha", "fitPoly")
 lapply(liblist, require, character.only = TRUE)
 ```
 
@@ -36,10 +36,15 @@ To reproduce the results in @gerard2018harnessing, you need to (1) download and 
 To install the needed R packages, run the following in R
 
 ```{r, eval = FALSE}
-install.packages(c("tidyverse", "rmutil", "snow", "parallel", 
-                   "ggthemes", "gridExtra", "devtools"))
-devtools::install_github("dcgerard/updog")
+install.packages(c("updog", "tidyverse", "rmutil", "snow", "parallel", 
+                   "ggthemes", "gridExtra", "devtools", "fitPoly"))
 devtools::install_github("dcgerard/updogAlpha")
+```
+
+If the most recent CRAN version of `updog` doesn't seem to work, you can retry with the version that I last used to reproduce these results:
+```{r, eval = FALSE}
+devtools::install_github("dcgerard/updog", 
+                         ref = "76c72eb717e18061576fc20b3c07f9da71b67263")
 ```
 
 Please follow the directions [here](https://github.com/pblischak/polyploid-genotyping/tree/master/ebg) to install `ebg`.
@@ -64,6 +69,9 @@ make simulations
 
 The simulations should take a few hours. You should get some coffee. Here is a list of some of my favorite places:
 
+* Washington, D.C.
+    - [Politics and Prose](https://www.yelp.com/biz/politics-and-prose-washington)
+    - [Colony Club](https://www.yelp.com/biz/colony-club-washington)
 * Chicago
     - [Sawada Coffee](https://www.yelp.com/biz/sawada-coffee-chicago)
     - [Plein Air Cafe](https://www.yelp.com/biz/plein-air-cafe-and-eatery-chicago-2)
@@ -72,6 +80,7 @@ The simulations should take a few hours. You should get some coffee. Here is a l
     - [Cafe Solstice](https://www.yelp.com/biz/cafe-solstice-seattle)
 * Columbus
     - [Yeah, Me Too](https://www.yelp.com/biz/yeah-me-too-columbus)
+    - [Fox in the Snow](https://www.yelp.com/biz/fox-in-the-snow-cafe-columbus-2)
     - [Stauf's Coffee Roasters](https://www.yelp.com/biz/staufs-coffee-roasters-columbus-2)
     - [Caffe Apropos](https://www.yelp.com/biz/caff%C3%A9-apropos-columbus-2)
     
