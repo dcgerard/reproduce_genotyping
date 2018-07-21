@@ -3,7 +3,6 @@ title: "Reproducing Results of Gerard et al. (2018)"
 bibliography: geno_bib.bib
 output: github_document
 ---
-[![DOI](https://zenodo.org/badge/94825101.svg)](https://zenodo.org/badge/latestdoi/94825101)
 
 # Introduction
 

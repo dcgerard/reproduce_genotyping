@@ -1,8 +1,6 @@
 Reproducing Results of Gerard et al. (2018)
 ================
 
-[![DOI](https://zenodo.org/badge/94825101.svg)](https://zenodo.org/badge/latestdoi/94825101)
-
 Introduction
 ============
 
