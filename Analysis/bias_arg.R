@@ -25,12 +25,18 @@ pl <- ggplot(data = dat, mapping = aes(x = a, y = A, color = col)) +
     xlab("Counts a") +
     geom_segment(data = df_lines,
         mapping = ggplot2::aes_string(x = "x", y = "y", xend = "xend",
-        yend = "yend"), lty = 2, alpha = 1 / 2, color = "black",
+        yend = "yend"), lty = 2, color = "grey50",
         size = 0.5) +
     ggthemes::scale_color_colorblind(guide = FALSE)
 
-pdf(file = "./Output/fig/bias_arg.pdf", family = "Times",
-    colormodel = "cmyk", height = 3, width = 3)
+setEPS()
+postscript(file = "./Output/fig/bias_arg.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 3,
+           width = 3,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

@@ -26,7 +26,13 @@ pl <- ggplot(data = longdat, mapping = aes(x = Value)) +
   ylab("Counts") +
   facet_wrap(~ Parameter, scales = "free")
 
-pdf(file = "./Output/fig/ufit_features.pdf", colormodel = "cmyk", family = "Times",
-    height = 6.5, width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/ufit_features.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 6.5,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()

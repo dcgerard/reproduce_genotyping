@@ -14,7 +14,7 @@ seq_error_upper <- updog:::expit(stats::qnorm(0.975, mean = -4.7, sd = 1))
 
 get_df_lines <- function(seq_error, bias_val, ploidy) {
     porig <- as.factor(paste0(0:ploidy, "/", ploidy))
-    pvec <- updog:::xi_fun(p = (0:ploidy) / ploidy, 
+    pvec <- updog:::xi_fun(p = (0:ploidy) / ploidy,
                            h = bias_val,
                            eps = seq_error)
     slopevec <- pvec / (1 - pvec)
@@ -47,7 +47,13 @@ pl <- ggplot(data = df_tot, mapping = aes(x = x, y = y, xend = xend, yend = yend
         axis.title = element_blank()) +
         ggthemes::scale_color_colorblind(name = "Original\nProbabilities")
 
-pdf(file = "./Output/fig/prior_quantiles.pdf", colormodel = "cmyk",
-    family = "Times", height = 3, width = 4)
+setEPS()
+postscript(file = "./Output/fig/prior_quantiles.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 3,
+           width = 4,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()

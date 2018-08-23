@@ -65,3 +65,5 @@ pdf(file = "./Output/fig/updog_fits.pdf", family = "Times", colormodel = "cmyk",
     width = 6.5, height = 2.1)
 print(pl)
 dev.off()
+
+system("pdftops -eps -r 500 ./Output/fig/updog_fits.pdf ./Output/fig/updog_fits.eps")

@@ -45,10 +45,16 @@ pl <- ggplot(data = snptot, mapping = aes(x = a, y = A, col = geno)) +
   xlab("Counts a") +
   ylab("Counts A") +
   geom_segment(data = df_lines_tot, mapping = aes(x = x, y = y, xend = xend, yend = yend),
-               lty = 2, alpha = 1 / 2, color = "black", size = 0.5) +
+               lty = 2, color = "grey50", size = 0.5) +
   ggthemes::scale_color_colorblind()
 
-pdf(file = "./Output/fig/supermassa_fits.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.1, width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/supermassa_fits.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 2.1,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()

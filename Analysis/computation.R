@@ -12,7 +12,14 @@ pl <- ggplot(data = data_frame(time = time_vec), mapping = aes(x = time)) +
   theme_bw() +
   xlab("Time (s)")
 
-pdf(file = "./Output/fig/comp_time.pdf", family = "Times", colormodel = "cmyk", width = 6, height = 2)
+setEPS()
+postscript(file = "./Output/fig/comp_time.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           width = 6,
+           height = 2,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

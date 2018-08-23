@@ -26,9 +26,13 @@ pl <- ggplot(data = subdat,
   xlab("Allele Frequency") +
   ylab("Proportion Correct")
 
-pdf(file = "./Output/fig/prop_correct.pdf",
-    width = 6.5, height = 7.5,
-    family = "Times")
+setEPS()
+postscript(file = "./Output/fig/prop_correct.eps",
+           family = "Times",
+           width = 6.5,
+           height = 6.2,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -57,9 +61,13 @@ pl <- ggplot(data = subdat,
   xlab("Allele Frequency") +
   ylab("Correlation")
 
-pdf(file = "./Output/fig/corr.pdf",
-    width = 6.5, height = 7.5,
-    family = "Times")
+setEPS()
+postscript(file = "./Output/fig/corr.eps",
+           width = 6.5,
+           height = 7.5,
+           family = "Times",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -91,7 +99,7 @@ pcdat$Method <- factor(pcdat$Method, levels = c("updog", "fitPoly"))
 pl <- ggplot(data = pcdat,
              mapping = aes(x = af, y = diff, color = Method)) +
   facet_grid(bias ~ od) +
-  geom_boxplot(outlier.size = 0.5) +
+  geom_boxplot(outlier.size = 0.1, lwd = 0.3) +
   geom_hline(yintercept = 0, lty = 2, color = ggthemes::colorblind_pal()(3)[3]) +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white"),
@@ -100,10 +108,13 @@ pl <- ggplot(data = pcdat,
   xlab("Allele Frequency") +
   ylab("Difference")
 
-
-pdf(file = "./Output/fig/diff.pdf",
-    width = 6.5, height = 7.5,
-    family = "Times")
+setEPS()
+postscript(file = "./Output/fig/diff.eps",
+           width = 3.5,
+           height = 3.2,
+           family = "Times",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -132,15 +143,18 @@ longdat %>% ggplot(mapping = aes(y     = est_allele_freq,
   ylab("Estimated Allele Frequency") +
   geom_point(size = 0.1) +
   geom_smooth(color = ggthemes::colorblind_pal()(3)[3]) +
-  geom_abline(intercept = 0, slope = 1, lty = 2, alpha = 1/2) +
+  geom_abline(intercept = 0, slope = 1, lty = 2, color = "grey50") +
   guides(colour = guide_legend(override.aes = list(size=1.5))) +
   ggthemes::scale_color_colorblind() ->
   pl
 
-pdf(file = "./Output/fig/allele_freq_est.pdf",
-    family = "Times",
-    height = 7.5,
-    width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/allele_freq_est.eps",
+           family = "Times",
+           height = 7.5,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -169,10 +183,14 @@ pl <- ggplot(data = longdat,
   ylab("Estimated OD Parameter") +
   geom_point(size = 0.1) +
   geom_hline(mapping = aes(yintercept = od_param), lty = 2, color = "red")
-pdf(file = "./Output/fig/od_v_af.pdf",
-    family = "Times",
-    colormodel = "cmyk",
-    height = 7.5, width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/od_v_af.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 7.5,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -186,11 +204,14 @@ pl <- ggplot(data = longdat,
   xlab("Bias Parameter") +
   ylab("Estimated OD Parameter") +
   geom_hline(mapping = aes(yintercept = od_param), lty = 2, color = "red")
-pdf(file = "./Output/fig/od_v_bias.pdf",
-    family = "Times",
-    colormodel = "cmyk",
-    height = 3,
-    width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/od_v_bias.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 3,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -203,9 +224,9 @@ pl_od <- ggplot(data = longdat,
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   xlab(expression(tau)) +
   ylab(expression(hat(tau))) +
-  geom_hline(yintercept = 0, lty = 2, alpha = 1 / 2, color = "red") +
-  geom_hline(yintercept = 0.01, lty = 2, alpha = 1 / 2, color = "red") +
-  geom_hline(yintercept = 0.02, lty = 2, alpha = 1 / 2, color = "red")
+  geom_hline(yintercept = 0, lty = 2, color = "red3") +
+  geom_hline(yintercept = 0.01, lty = 2, color = "red3") +
+  geom_hline(yintercept = 0.02, lty = 2, color = "red3")
 
 
 
@@ -220,11 +241,14 @@ pl <- ggplot(data = longdat,
   ylab("Log2 Estimated Bias Parameter") +
   geom_point(size = 0.1) +
   geom_hline(mapping = aes(yintercept = log2(bias_val)), lty = 2, color = "red")
-pdf(file = "./Output/fig/bias_v_af.pdf",
-    family = "Times",
-    colormodel = "cmyk",
-    height = 7.5,
-    width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/bias_v_af.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 7.5,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -252,11 +276,14 @@ pl <- ggplot(data = longdat,
   ylab("Estimated Sequencing Error Rate") +
   geom_point(size = 0.1) +
   geom_hline(mapping = aes(yintercept = seq_error), lty = 2, color = "red")
-pdf(file = "./Output/fig/seq_v_af.pdf",
-    family = "Times",
-    colormodel = "cmyk",
-    height = 7.5,
-    width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/seq_v_af.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 7.5,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -273,10 +300,13 @@ pl_seq <- ggplot(data = longdat,
 
 ## Plots for main part of paper.
 suppressMessages(library(gridExtra))
-pdf(file = "./Output/fig/param_ests.pdf",
-    family = "Times",
-    colormodel = "cmyk",
-    height = 2.3,
-    width = 6.5)
+setEPS()
+postscript(file = "./Output/fig/param_ests.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           height = 2.3,
+           width = 6.5,
+           paper = "special",
+           horizontal = FALSE)
 grid.arrange(pl_od, pl_bias, pl_seq, ncol = 3)
 dev.off()

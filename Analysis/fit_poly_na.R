@@ -21,7 +21,13 @@ pl <- qplot(u_prop_mis, fp_prop_mis, size = I(0.3)) +
   ylab("fitPoly") +
   geom_abline(color = "red", lty = 2)
 
-pdf(file = "./Output/fig/prop_mis_shir.pdf", height = 2.4, width = 2.4)
+setEPS()
+postscript(file = "./Output/fig/prop_mis_shir.eps",
+           height = 2.4,
+           width = 2.4,
+           colormodel = "cmyk",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -30,11 +36,40 @@ weird_snp <- which(u_prop_mis < 0.05 & fp_prop_mis > 0.2)
 fout <- readRDS(paste0("./Output/fp_fits/fpout", weird_snp, ".RDS"))
 uout <- readRDS(paste0("./Output/updog_fits/uout", weird_snp, ".RDS"))
 
+
+maxcount <- max(max(uout$input$refvec, na.rm = TRUE), max(uout$input$sizevec - uout$input$refvec, na.rm = TRUE))
+dfdat <- data_frame(A = uout$input$refvec, a = uout$input$sizevec - uout$input$refvec,
+                    ogeno = factor(uout$geno, levels = 0:uout$input$ploidy),
+                    prob_ok = 1 - uout$prob_outlier)
+dfdat$snp <- paste0("SNP", index)
+pk <- updog:::xi_fun(p = (0:uout$input$ploidy) / uout$input$ploidy, h = uout$bias, eps = uout$seq)
+slopevec <- pk/(1 - pk)
+xend <- pmin(rep(maxcount, uout$input$ploidy + 1), maxcount/slopevec)
+yend <- pmin(rep(maxcount, uout$input$ploidy + 1), maxcount * slopevec)
+df_lines <- data_frame(x = rep(0, uout$input$ploidy + 1), y = rep(0, uout$input$ploidy + 1), xend = xend, yend = yend)
+
 uout$input$p1ref <- NULL
-pl <- plot(uout)
-pl <- pl + guides(color = guide_legend(title="Genotype"),
-                  alpha = guide_legend(title="Maximum\nPosterior\nProbability"))
-pdf(file = "./Output/fig/ufit_weird.pdf", height = 2.4, width = 3.7)
+pl <- plot_geno(uout,
+                refvec = uout$input$refvec,
+                sizevec = uout$input$sizevec,
+                ploidy = uout$input$ploidy,
+                geno = uout$geno,
+                seq = uout$seq,
+                bias = uout$bias,
+                use_colorblind = TRUE)
+pl <- pl + guides(color = guide_legend(title="Genotype")) +
+  geom_segment(data = df_lines,
+               mapping = aes(x = x, y = y, xend = xend, yend = yend),
+               lty = 2,
+               color = "grey50",
+               size = 0.5)
+setEPS()
+postscript(file = "./Output/fig/ufit_weird.eps",
+           height = 2.4,
+           width = 3.7,
+           colormodel = "cmyk",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

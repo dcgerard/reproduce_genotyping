@@ -127,13 +127,19 @@ ggplot(mapping = aes(x = a, y = A, col = geno)) +
   scale_color_hue(drop = FALSE) +
   # ggthemes::scale_color_colorblind(drop = FALSE) +
   geom_segment(data = df_lines, mapping = aes(x = x, y = y, xend = xend, yend = yend),
-               lty = 2, alpha = 1 / 2, color = "black", size = 0.5) +
+               lty = 2, color = "grey50", size = 0.5) +
   guides(colour = guide_legend(override.aes = list(size=1.5),
                                title = "Genotype")) ->
   pl
 
-pdf(file = "./Output/fig/ident_prob.pdf", family = "Times", colormodel = "cmyk",
-    width = 6, height = 2.4)
+setEPS()
+postscript(file = "./Output/fig/ident_prob.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           width = 6.5,
+           height = 2.1,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

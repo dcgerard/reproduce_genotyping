@@ -185,4 +185,7 @@ pdf(file = "./Output/fig/real_data_plots.pdf", colormodel = "cmyk", family = "Ti
 print(pl)
 dev.off()
 
+## Do this since getting rid of alpha is hard here.
+system("pdftops -eps -r 500 ./Output/fig/real_data_plots.pdf ./Output/fig/real_data_plots.eps")
+
 

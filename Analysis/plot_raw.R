@@ -36,15 +36,21 @@ pl <- ggplot(data = longdat, mapping = aes(x = a, y = A, pch = out, size = ok_si
     facet_grid(. ~ SNP) +
     xlim(0, maxcount) +
     ylim(0, maxcount) +
-    geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 2) +
+    geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, color = "grey50") +
     theme(strip.background = element_rect(fill = "white"),
           legend.position = "none") +
     xlab("Counts a") +
     ylab("Counts A") +
     scale_size_continuous(range = c(0.4, 1))
 
-pdf(file = "./Output/fig/snp_examples.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.4, width = 6)
+setEPS()
+postscript(file = "./Output/fig/snp_examples.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 2.2,
+           width = 6,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -71,12 +77,18 @@ pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A)) +
   ylim(0, maxcount) +
   theme(strip.background = element_rect(fill = "white"),
         legend.position = "none") +
-  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 8) +
+  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, color = "grey50") +
   xlab("Counts a") +
   ylab("Counts A") +
   scale_size_continuous(range = c(0.4, 1))
 
-pdf(file = "./Output/fig/single_snp.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.4, width = 2.4)
+setEPS()
+postscript(file = "./Output/fig/single_snp.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 2.2,
+           width = 2.4,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()

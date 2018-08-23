@@ -12,7 +12,7 @@ sdat %>%
 
 smalldat %>%
   ggplot(mapping = aes(x = factor(firstweight), y = s1pp_firstweight)) +
-  geom_boxplot() +
+  geom_boxplot(lwd = 0.2, outlier.size = 0.4) +
   facet_grid(bias ~ od) +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white")) +
@@ -20,9 +20,13 @@ smalldat %>%
   ylab("Estimated Weight") ->
   pl
 
-pdf(file = "./Output/fig/est_weight_pp.pdf",
-    width = 6.5, height = 7.5,
-    family = "Times")
+setEPS()
+postscript(file = "./Output/fig/est_weight_pp.eps",
+           width = 3.5,
+           height = 3.5,
+           family = "Times",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -39,7 +43,7 @@ subdat$Method <- factor(subdat$Method,levels = c("S1pp", "S1", "fitPoly"))
 pl <- ggplot(data = subdat,
              mapping = aes(x = weight, y = prop_correct, color = Method)) +
   facet_grid(bias ~ od) +
-  geom_boxplot(outlier.size = 0.5) +
+  geom_boxplot(outlier.size = 0.2, lwd = 0.5) +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white"),
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
@@ -47,8 +51,12 @@ pl <- ggplot(data = subdat,
   xlab("Weight on 1") +
   ylab("Proportion Correct")
 
-pdf(file = "./Output/fig/prop_correct_pp.pdf",
-    width = 6.5, height = 7.5,
-    family = "Times")
+setEPS()
+postscript(file = "./Output/fig/prop_correct_pp.eps",
+           width = 3.5,
+           height = 3.2,
+           family = "Times",
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()

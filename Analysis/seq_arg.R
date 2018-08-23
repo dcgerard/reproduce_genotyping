@@ -50,16 +50,23 @@ pl <- ggplot(data = dfdat, mapping = aes(x = a, y = A)) +
   facet_grid(. ~ fit) +
   xlim(0, maxcount) +
   ylim(0, maxcount) +
-  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, alpha = 1 / 10) +
-  theme(strip.background = element_rect(fill = "white")) +
+  geom_segment(data = smalldat, mapping = aes(x = xstart, y = ystart, xend = xend, yend = yend), lty = 2, color = "grey50") +
+  theme(strip.background = element_rect(fill = "white"),
+        strip.text = element_text(size = 8)) +
   xlab("Counts a") +
   ylab("Counts A") +
   scale_color_manual(values = pal) +
   scale_size_continuous(range = c(0.4, 1), guide = FALSE) +
   scale_shape_discrete(guide = FALSE)
 
-pdf(file = "./Output/fig/seq_error_example.pdf", colormodel = "cmyk",
-    family = "Times", height = 2.4, width = 5)
+setEPS()
+postscript(file = "./Output/fig/seq_error_example.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 1.7,
+           width = 3.5,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

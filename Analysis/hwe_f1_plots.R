@@ -19,7 +19,11 @@ pl <- ggplot(data = smalldat, mapping = aes(x = as.factor(pgeno), y = prop_corre
   scale_color_colorblind(name = "Prior",
                          labels = c("HWE", "S1"))
 
-pdf(file = "./Output/fig/hwe_s1_prop_correct.pdf", colormodel = "cmyk")
+
+setEPS()
+postscript(file = "./Output/fig/hwe_s1_prop_correct.eps",
+           colormodel = "cmyk",
+           family = "Times")
 print(pl)
 dev.off()
 
@@ -33,8 +37,10 @@ smalldat %>%
   qdat
 
 pl <- ggplot(data = qdat, mapping = aes(x = pgeno, y = median, color = method)) +
-  geom_point(position = position_dodge(width = 0.5)) +
-  geom_linerange(aes(x = pgeno, ymin = lower, ymax = upper), position = position_dodge(width = 0.5)) +
+  geom_point(position = position_dodge(width = 0.5), size = 0.5) +
+  geom_linerange(aes(x = pgeno, ymin = lower, ymax = upper),
+                 position = position_dodge(width = 0.5),
+                 lwd = 0.5) +
   facet_grid(bias ~ od) +
   xlab("Parent Genotype") +
   ylab("Proportion Correct") +
@@ -44,7 +50,14 @@ pl <- ggplot(data = qdat, mapping = aes(x = pgeno, y = median, color = method)) 
                          labels = c("HWE", "S1")) +
   scale_x_continuous(breaks = c(3, 4, 5))
 
-pdf(file = "./Output/fig/hwe_s1_quantile.pdf", colormodel = "cmyk")
+setEPS()
+postscript(file = "./Output/fig/hwe_s1_quantile.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           width = 3.5,
+           height = 3.3,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
@@ -68,7 +81,10 @@ pl <- dfcorrect %>%
   scale_x_continuous(breaks = c(3, 4, 5)) +
   ylim(0, 1)
 
-pdf(file = "./Output/fig/hwe_s1_parent_correct.pdf", colormodel = "cmyk")
+setEPS()
+postscript(file = "./Output/fig/hwe_s1_parent_correct.eps",
+           colormodel = "cmyk",
+           family = "Times")
 print(pl)
 dev.off()
 
@@ -90,7 +106,10 @@ pl <- ggplot(data = smalldat, mapping = aes(x = as.factor(pgeno), y = mse, color
   scale_color_colorblind(name = "Prior",
                          labels = c("HWE", "S1"))
 
-pdf(file = "./Output/fig/hwe_s1_mse.pdf", colormodel = "cmyk")
+setEPS()
+postscript(file = "./Output/fig/hwe_s1_mse.eps",
+           colormodel = "cmyk",
+           family = "Times")
 print(pl)
 dev.off()
 
@@ -115,6 +134,9 @@ pl <- ggplot(data = qdat, mapping = aes(x = pgeno, y = mean, color = method)) +
                          labels = c("HWE", "S1")) +
   scale_x_continuous(breaks = c(3, 4, 5))
 
-pdf(file = "./Output/fig/hwe_s1_mse_quant.pdf", colormodel = "cmyk")
+setEPS()
+postscript(file = "./Output/fig/hwe_s1_mse_quant.eps",
+           colormodel = "cmyk",
+           family = "Times")
 print(pl)
 dev.off()

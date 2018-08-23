@@ -40,10 +40,15 @@ for(ploidy_index in 1:length(ploidy_vec)) {
       ggtitle(paste0("Ploidy: ", ploidy_current, ", Allele Freq: ", alpha_current)) +
       theme(legend.position = "none") ->
       pl
-    pdf(file = paste0("./Output/oracle/fig/n_for_05_alpha", alpha_current * 100, "_ploidy", ploidy_current, ".pdf"), height = 4, width = 5, family = "Times")
+    setEPS()
+    postscript(file = paste0("./Output/oracle/fig/n_for_05_alpha", alpha_current * 100, "_ploidy", ploidy_current, ".eps"),
+               height = 4,
+               width = 5,
+               family = "Times",
+               paper = "special",
+               horizontal = FALSE)
     print(pl)
     dev.off()
-
   }
 }
 
@@ -83,7 +88,13 @@ for(ploidy_index in 1:length(ploidy_vec)) {
       ggtitle(paste0("Ploidy: ", ploidy_current, ", Allele Freq: ", alpha_current)) +
       theme(legend.position = "none") ->
       pl
-    pdf(file = paste0("./Output/oracle/fig/cor_n_for_05_alpha", alpha_current * 100, "_ploidy", ploidy_current, ".pdf"), height = 4, width = 5, family = "Times")
+    setEPS()
+    postscript(file = paste0("./Output/oracle/fig/cor_n_for_05_alpha", alpha_current * 100, "_ploidy", ploidy_current, ".eps"),
+               height = 4,
+               width = 5,
+               family = "Times",
+               paper = "special",
+               horizontal = FALSE)
     print(pl)
     dev.off()
 

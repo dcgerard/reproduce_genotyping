@@ -12,7 +12,7 @@ for (bindex in 1:length(bias_vec)) {
     bias <- bias_vec[bindex]
     for (sindex in 1:length(seq_error_vec)) {
         seq_error <- seq_error_vec[sindex]
-        pvec <- updog:::xi_fun(p   = (0:ploidy) / ploidy, 
+        pvec <- updog:::xi_fun(p   = (0:ploidy) / ploidy,
                                h   = bias,
                                eps = seq_error)
         slopevec <- pvec / (1 - pvec)
@@ -44,8 +44,14 @@ pl <- ggplot(data = df_tot, mapping = aes(x = x, y = y,
     ylab("Sequencing Error") +
     ggthemes::scale_color_colorblind(name = "Original\nProbabilities")
 
-pdf(file = "./Output/fig/prob_plots.pdf", family = "Times",
-    colormodel = "cmyk", width = 6, height = 3)
+setEPS()
+postscript(file = "./Output/fig/prob_plots.eps",
+           family = "Times",
+           colormodel = "cmyk",
+           width = 6,
+           height = 3,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 

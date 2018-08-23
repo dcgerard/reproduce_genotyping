@@ -60,7 +60,7 @@ pl <- ggplot(data = dat_counts, mapping = aes(x = a, y = A, col = bad_ocounts)) 
     xlab("Counts a") +
     geom_segment(data = df_lines,
         mapping = ggplot2::aes_string(x = "x", y = "y", xend = "xend",
-        yend = "yend"), lty = 2, alpha = 1 / 2, color = "black",
+        yend = "yend"), lty = 2, color = "grey50",
         size = 0.5) +
     ggthemes::scale_color_colorblind(guide = FALSE)
 
@@ -75,8 +75,14 @@ pl <- pl + geom_line(data = dat4, mapping = aes(x = alower, y = Alower),
 pl <- pl + geom_line(data = dat4, mapping = aes(x = aupper, y = Aupper),
     color = colvec[7], lty = 1, alpha = 1)
 
-pdf(file = "./Output/fig/od_arg.pdf", colormodel = "cmyk",
-    family = "Times", height = 3, width = 3)
+setEPS()
+postscript(file = "./Output/fig/od_arg.eps",
+           colormodel = "cmyk",
+           family = "Times",
+           height = 2.2,
+           width = 2.4,
+           paper = "special",
+           horizontal = FALSE)
 print(pl)
 dev.off()
 
