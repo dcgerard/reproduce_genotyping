@@ -1,6 +1,6 @@
 ---
 title: "Reproducing Results of Gerard et al. (2018)"
-bibliography: geno_bib.bib
+bibliography: "geno_bib.bib"
 output: github_document
 ---
 [![DOI](https://zenodo.org/badge/94825101.svg)](https://zenodo.org/badge/latestdoi/94825101)
@@ -8,7 +8,7 @@ output: github_document
 # Introduction
 
 This repository contains code to reproduce the empirical evaluations
-of @gerard2018harnessing. The new methods can be found in the
+of @gerard2018genotyping. The new methods can be found in the
 [updog](https://cran.r-project.org/package=updog) package on CRAN.
 
 ```{r, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
@@ -29,7 +29,7 @@ If you find a bug, please create an
 
 # Instructions
 
-To reproduce the results in @gerard2018harnessing, you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
+To reproduce the results in @gerard2018genotyping, you need to (1) download and install the appropriate packages, (2) obtain the appropriate data, (3) run `make`, and (4) get coffee.
 
 ## Install Packages
 
@@ -55,7 +55,7 @@ Place [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.o
 
 ## Run Make
 
-To reproduce all of the results in @gerard2018harnessing, simply run
+To reproduce all of the results in @gerard2018genotyping, simply run
 `make` from the terminal. To reproduce the real-data analysis, run
 ``` bash
 make sweet_potato
