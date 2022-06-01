@@ -51,7 +51,7 @@ Please follow the directions [here](https://github.com/pblischak/polyploid-genot
 
 ## Get Data
 
-Place [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](http://sweetpotato-garden.kazusa.or.jp/) in the Data folder. The direct url is: ftp://ftp.kazusa.or.jp/pub/sweetpotato/GeneticMap/
+Place [KDRIsweetpotatoXushu18S1LG2017.vcf.gz](https://github.com/dcgerard/KDRIsweetpotatoXushu18S1LG2017) in the Data folder. The direct url is: <https://github.com/dcgerard/KDRIsweetpotatoXushu18S1LG2017/raw/main/KDRIsweetpotatoXushu18S1LG2017.vcf.gz>
 
 ## Run Make
 
